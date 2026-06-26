@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>夏夜晚风</title>
+<style>
+:root{--sun:#c4a7e7;--xia:#a6e22e;--yin:#b0bec5;--tp:rgba(255,255,255,.95);--ts:rgba(255,255,255,.65);--td:rgba(255,255,255,.35);--dbg:rgba(0,0,0,.62)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;background:#0a0a0a;color:var(--tp);overflow:hidden;height:100vh;width:100vw;user-select:none}
+#G{width:100vw;height:100vh;position:relative;overflow:hidden}
+#BG{position:absolute;top:0;left:0;right:0;bottom:0;transition:opacity 1.2s ease;z-index:1}
+.b-morning{background:linear-gradient(135deg,#ffecd2,#fcb69f)}
+.b-afternoon{background:linear-gradient(135deg,#89CFF0,#B8D4E3 50%,#fed6e3)}
+.b-evening{background:linear-gradient(135deg,#ff9966,#ff5e62 40%,#6b4c9a)}
+.b-night{background:linear-gradient(135deg,#0f0c29,#302b63 50%,#24243e)}
+.b-room{background:linear-gradient(135deg,#2c2c3e,#1a1a2e)}
+.b-corridor{background:linear-gradient(135deg,#3a3a4a,#2a2a3a)}
+.b-store{background:linear-gradient(135deg,#4a3f6b,#2d2d44)}
+.b-park{background:linear-gradient(135deg,#2d6a4f,#52b788)}
+.b-coffee{background:linear-gradient(135deg,#3e2723,#5d4037)}
+.b-company{background:linear-gradient(135deg,#606c88,#3f4c6b)}
+.b-rain{background:linear-gradient(135deg,#4b6584,#778ca3 50%,#4b6584)}
+.b-rooftop{background:linear-gradient(180deg,#0f0c29,#1a1a3e 40%,#302b63)}
+.b-sunsetrt{background:linear-gradient(180deg,#ff7e5f,#feb47b 30%,#6b4c9a 70%,#1a1a2e)}
+.b-endgood{background:linear-gradient(135deg,#ffecd2,#fcb69f 50%,#ff9a9e)}
+.b-endbad{background:linear-gradient(135deg,#2c2c3e,#1a1a2e)}
+.b-endhid{background:linear-gradient(135deg,#0f0c29,#302b63 30%,#ff7e5f 60%,#feb47b)}
+#BG::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;opacity:.08;pointer-events:none}
+#PTC{position:absolute;top:0;left:0;right:0;bottom:0;z-index:2;pointer-events:none;overflow:hidden}
+.pt{position:absolute;width:3px;height:3px;background:rgba(255,220,100,.5);border-radius:50%;animation:fu linear infinite;box-shadow:0 0 6px rgba(255,220,100,.3)}
+@keyframes fu{0%{transform:translateY(0) translateX(0);opacity:0}10%{opacity:1}90%{opacity:.5}100%{transform:translateY(-100vh) translateX(30px);opacity:0}}
+#TR{position:absolute;top:0;left:0;right:0;bottom:0;background:#0a0a0a;z-index:90;opacity:0;pointer-events:none;transition:opacity .8s ease}
+#TR.on{opacity:1;pointer-events:all}
+#CA{position:absolute;bottom:180px;left:0;right:0;height:200px;display:flex;justify-content:center;align-items:flex-end;z-index:10;pointer-events:none}
+.cp{font-size:88px;line-height:1;transition:all .5s ease;filter:drop-shadow(0 4px 20px rgba(0,0,0,.4));position:relative;opacity:0;transform:translateY(20px)}
+.cp.show{opacity:1;transform:translateY(0)}
+.cp .ct{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);font-size:11px;white-space:nowrap;letter-spacing:2px;opacity:.7}
+#DLG{position:absolute;bottom:0;left:0;right:0;background:var(--dbg);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid rgba(255,255,255,.06);padding:18px 28px 14px;min-height:160px;z-index:20;cursor:pointer;display:none}
+#SPK{font-size:14px;font-weight:500;margin-bottom:10px;letter-spacing:3px}
+.s-sun{color:var(--sun)}.s-xia{color:var(--xia)}.s-yin{color:var(--yin)}.s-nar{color:var(--td);font-style:italic;letter-spacing:1px}.s-end{color:#ffd700}
+#DTX{font-size:15.5px;line-height:1.85;color:var(--tp);max-width:740px;min-height:40px;white-space:pre-wrap}
+#HNT{position:absolute;bottom:8px;right:20px;font-size:11px;color:var(--td);animation:pls 2s infinite}
+@keyframes pls{0%,100%{opacity:.2}50%{opacity:.7}}
+#CHC{position:absolute;bottom:175px;left:50%;transform:translateX(-50%);display:none;flex-direction:column;gap:9px;z-index:25;width:86%;max-width:540px}
+.ch{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:13px 20px;color:var(--tp);font-size:14.5px;font-family:inherit;cursor:pointer;transition:all .3s ease;text-align:left;backdrop-filter:blur(8px)}
+.ch:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.22);transform:translateX(4px)}
+#SB{position:absolute;top:0;left:0;right:0;display:none;justify-content:space-between;align-items:center;padding:12px 18px;background:linear-gradient(to bottom,rgba(0,0,0,.4),transparent);z-index:30;font-size:13px;color:var(--ts)}
+#SL{display:flex;gap:16px;align-items:center}#SR{display:flex;gap:8px}
+.sb{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:5px;padding:4px 10px;color:var(--ts);font-size:11px;cursor:pointer;font-family:inherit;transition:all .2s}
+.sb:hover{background:rgba(255,255,255,.16);color:var(--tp)}
+#TT{position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#ff7e5f,#feb47b 25%,#e8a87c 50%,#6b4c9a 75%,#1a1a2e);z-index:200;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:24px}
+#TT::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(circle at 25% 35%,rgba(255,200,100,.2) 0%,transparent 50%),radial-gradient(circle at 75% 65%,rgba(100,80,160,.15) 0%,transparent 50%)}
+#TT h1{font-family:Georgia,'Noto Serif SC',serif;font-size:64px;font-weight:700;letter-spacing:16px;color:#fff;text-shadow:0 4px 30px rgba(0,0,0,.3);z-index:1}
+#TSB{font-size:14px;color:rgba(255,255,255,.55);letter-spacing:5px;z-index:1;font-family:Georgia,serif}
+.tbg{display:flex;flex-direction:column;gap:12px;z-index:1;margin-top:24px}
+.tb{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:13px 44px;color:#fff;font-size:15px;font-family:inherit;cursor:pointer;letter-spacing:4px;transition:all .3s ease;backdrop-filter:blur(8px)}
+.tb:hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.35);transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,.2)}
+.ov{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.82);backdrop-filter:blur(16px);z-index:150;display:none;flex-direction:column;align-items:center;padding:60px 30px;overflow-y:auto}
+.ov.show{display:flex}
+.ov h2{font-size:24px;letter-spacing:6px;margin-bottom:30px;color:rgba(255,255,255,.8)}
+.ov .cb{position:absolute;top:20px;right:24px;background:none;border:1px solid rgba(255,255,255,.2);border-radius:50%;width:36px;height:36px;color:rgba(255,255,255,.6);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.ov .cb:hover{background:rgba(255,255,255,.1);color:#fff}
+.ss{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:18px 24px;width:90%;max-width:480px;margin-bottom:14px;cursor:pointer;transition:all .3s}
+.ss:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2)}
+.sr{display:flex;justify-content:space-between;align-items:center;width:90%;max-width:400px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.sr label{font-size:14px;color:var(--ts)}
+.sr input[type=range]{width:140px;accent-color:#ff9966}
+.tg{width:44px;height:24px;background:rgba(255,255,255,.15);border-radius:12px;cursor:pointer;position:relative;transition:background .3s;border:none}
+.tg.on{background:#ff9966}
+.tg::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:transform .3s}
+.tg.on::after{transform:translateX(20px)}
+.ei{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:16px 20px;width:90%;max-width:500px;margin-bottom:10px}
+.ei.locked{opacity:.35}
+.ei h3{font-size:15px;margin-bottom:6px}
+.ei p{font-size:12px;color:var(--td);line-height:1.6}
+#LOC{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:10px 0}
+.lb{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:10px 16px;color:var(--tp);font-size:13px;font-family:inherit;cursor:pointer;transition:all .3s}
+.lb:hover{background:rgba(255,255,255,.15);transform:translateY(-2px)}
+.lb.act{border-color:#ff9966;color:#ff9966}
+#NFT{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.85);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:20px 30px;z-index:120;display:none;font-size:14px;color:var(--tp);text-align:center;max-width:400px}
+
+</style>
+</head>
+<body>
+<div id="G">
+<div id="BG" class="b-evening"></div>
+<div id="PTC"></div>
+<div id="TR"></div>
+<div id="CA"></div>
+<div id="DLG"><div id="SPK"></div><div id="DTX"></div><div id="HNT">▼</div></div>
+<div id="CHC"></div>
+<div id="SB"><div id="SL"><span id="DAY"></span><span id="PRD"></span><span id="LCT"></span><span id="GRDN"></span></div><div id="SR"><button class="sb" onclick="openSave()">存档</button><button class="sb" onclick="openLoad()">读档</button><button class="sb" onclick="openSettings()">设置</button><button class="sb" onclick="openGallery()">回顾</button></div></div>
+<div id="NFT"></div>
+<div id="TT">
+<h1>夏晚晚风</h1>
+<div id="TSB">蝉鸣 · 天台 · 三个女孩</div>
+<div class="tbg">
+<button class="tb" onclick="startGame()">开始游戏</button>
+<button class="tb" onclick="openLoad()">继续游戏</button>
+<button class="tb" onclick="openGallery()">结局回顾</button>
+</div>
+</div>
+<div id="OV-SAVE" class="ov"><button class="cb" onclick="closePanel('OV-SAVE')">×</button><h2>存档</h2><div id="SAVE-SLOTS"></div></div>
+<div id="OV-LOAD" class="ov"><button class="cb" onclick="closePanel('OV-LOAD')">×</button><h2>读档</h2><div id="LOAD-SLOTS"></div></div>
+<div id="OV-SET" class="ov"><button class="cb" onclick="closePanel('OV-SET')">×</button><h2>设置</h2>
+<div class="sr"><label>文字速度</label><input type="range" id="SPEED" min="1" max="5" value="3" onchange="setSpeed(this.value)"></div>
+<div class="sr"><label>自动播放</label><button class="tg" id="AUTO-TGL" onclick="toggleAuto()"></button></div>
+<div class="sr"><label>跳过已读</label><button class="tg" id="SKIP-TGL" onclick="toggleSkip()"></button></div>
+</div>
+<div id="OV-GAL" class="ov"><button class="cb" onclick="closePanel('OV-GAL')">×</button><h2>结局回顾</h2><div id="GAL-LIST"></div></div>
+</div>
+
+<script>
+'use strict';
+var S={day:1,period:0,sunian:0,xiaolu:0,yinuo:0,growth:0,garden:0,flags:{},readNodes:{},location:'room',week:1};
+var PERIODS=['早晨','下午','傍晚','深夜'];
+var MOODS=['happy','calm','annoyed','tired','pensive'];
+var typing=false,tt=null,autoMode=false,skipRead=false,tSpd=30;
+var curNode=null,hist=[];
+var moodC={};
+var endingsU=new Set(JSON.parse(localStorage.getItem('sn_ends')||'[]'));
+var $=function(id){return document.getElementById(id)};
+var BG=$('BG'),TR=$('TR'),CA=$('CA'),DLG=$('DLG'),DTX=$('DTX');
+var SPK=$('SPK'),CHC=$('CHC'),SB=$('SB'),TT=$('TT');
+var DAY_E=$('DAY'),PRD_E=$('PRD'),LCT_E=$('LCT'),GRDN_E=$('GRDN');
+var NFT=$('NFT'),PTC=$('PTC');
+
+function getMood(ch,d){var k=ch+d;if(!moodC[k])moodC[k]=MOODS[Math.floor(Math.random()*MOODS.length)];return moodC[k]}
+function setBG(c){BG.className=c}
+function sp(n){var p=document.createElement('div');p.className='pt';p.style.left=Math.random()*100+'%';p.style.top=(80+Math.random()*20)+'%';p.style.animationDuration=(8+Math.random()*12)+'s';p.style.animationDelay=Math.random()*10+'s';PTC.appendChild(p)}
+function spawnP(n){PTC.innerHTML='';for(var i=0;i<n;i++)sp()}
+function showChar(emo,ck,lb){CA.innerHTML='';var d=document.createElement('div');d.className='cp '+(ck||'');d.innerHTML=emo+(lb?'<span class="ct">'+lb+'</span>':'');CA.appendChild(d);requestAnimationFrame(function(){d.classList.add('show')})}
+function hideChar(){var cs=CA.querySelectorAll('.cp');for(var i=0;i<cs.length;i++)cs[i].classList.remove('show');setTimeout(function(){CA.innerHTML=''},500)}
+function typeText(txt,cb){typing=true;DTX.textContent='';var i=0;var h=$('HNT');h.style.display='none';function tick(){if(!typing)return;if(i<txt.length){DTX.textContent+=txt[i];i++;tt=setTimeout(tick,tSpd)}else{typing=false;h.style.display='block';if(autoMode)tt=setTimeout(function(){adv()},2000);if(cb)cb()}}tick()}
+function finishType(){if(typing){clearTimeout(tt);typing=false;var n=GN(curNode);if(n)DTX.textContent=n.tx;$('HNT').style.display='block'}}
+var SPK_MAP={'苏念':['s-sun','苏念'],'林小鹿':['s-xia','林小鹿'],'沈以诺':['s-yin','沈以诺'],'narrator':['s-nar',''],'　':['s-nar',''],'ending':['s-end','—— END ——'],'???':['s-nar','???']};
+function setSpeaker(sp){var p=SPK_MAP[sp]||['s-nar',sp];SPK.className=p[0];SPK.textContent=p[1]}
+var CM={
+  'sunian':['🎹','sunian','苏念'],'xiaolu':['🌿','xiaolu','林小鹿'],'yinuo':['☕','yinuo','沈以诺'],
+  'sunian_smile':['😊','sunian','苏念'],'sunian_shy':['😳','sunian','苏念'],'sunian_sad':['😢','sunian','苏念'],
+  'sunian_piano':['🎹','sunian','苏念'],'sunian_think':['🤔','sunian','苏念'],
+  'xiaolu_happy':['😄','xiaolu','林小鹿'],'xiaolu_confused':['😕','xiaolu','林小鹿'],
+  'xiaolu_sad':['🥺','xiaolu','林小鹿'],'xiaolu_plant':['🌱','xiaolu','林小鹿'],
+  'xiaolu_serious':['😐','xiaolu','林小鹿'],
+  'yinuo_cool':['😎','yinuo','沈以诺'],'yinuo_smile':['😏','yinuo','沈以诺'],
+  'yinuo_tired':['😮‍💨','yinuo','沈以诺'],'yinuo_guard':['😶','yinuo','沈以诺'],
+  'yinuo_warm':['☺️','yinuo','沈以诺'],'yinuo_coffee':['☕','yinuo','沈以诺']
+};
+function GN(id){return SCRIPT[id]}
+function playNode(id){var n=GN(id);if(!n){console.error('Missing:',id);return}curNode=id;S.readNodes[id]=true;hist.push(id);if(n.bg)setBG('b-'+n.bg);if(n.char){var p=CM[n.char]||['👤','',''];showChar(p[0],p[1],p[2])}else if(n.hc)hideChar();setSpeaker(n.sp||'narrator');if(n.fx)applyFx(n.fx);DLG.style.display='block';SB.style.display='flex';typeText(n.tx,function(){if(n.ch)showCh(n.ch)})}
+function showCh(chs){CHC.innerHTML='';CHC.style.display='flex';DLG.style.cursor='default';for(var i=0;i<chs.length;i++){var c=chs[i];if(c.cd&&!chkCd(c.cd))continue;(function(c){var b=document.createElement('button');b.className='ch';b.textContent=c.tx;b.onclick=function(){CHC.style.display='none';DLG.style.cursor='pointer';if(c.fx)applyFx(c.fx);if(c.sf)S.flags[c.sf]=true;playNode(c.nx)};CHC.appendChild(b)})(c)}if(CHC.children.length===0){var fb=null;for(var j=0;j<chs.length;j++)if(chs[j].fb){fb=chs[j];break}if(fb){CHC.style.display='none';DLG.style.cursor='pointer';playNode(fb.nx)}}}
+function chkCd(cd){if(cd.sm&&S.sunian<cd.sm)return false;if(cd.sx&&S.sunian>cd.sx)return false;if(cd.xm&&S.xiaolu<cd.xm)return false;if(cd.xx&&S.xiaolu>cd.xx)return false;if(cd.ym&&S.yinuo<cd.ym)return false;if(cd.yx&&S.yinuo>cd.yx)return false;if(cd.gm&&S.growth<cd.gm)return false;if(cd.gdn&&S.garden<cd.gdn)return false;if(cd.f&&!S.flags[cd.f])return false;if(cd.nf&&S.flags[cd.nf])return false;return true}
+function applyFx(fx){if(fx.su)S.sunian=Math.max(0,Math.min(100,S.sunian+fx.su));if(fx.xi)S.xiaolu=Math.max(0,Math.min(100,S.xiaolu+fx.xi));if(fx.yi)S.yinuo=Math.max(0,Math.min(100,S.yinuo+fx.yi));if(fx.gr)S.growth=Math.max(0,Math.min(100,S.growth+fx.gr));if(fx.gd)S.garden=Math.max(0,Math.min(3,S.garden+fx.gd));if(fx.sf)S.flags[fx.sf]=true;showN(fx)}
+function showN(fx){var p=[];if(fx.su>0)p.push('苏念好感+'+fx.su);if(fx.su<0)p.push('苏念好感'+fx.su);if(fx.xi>0)p.push('林小鹿好感+'+fx.xi);if(fx.xi<0)p.push('林小鹿好感'+fx.xi);if(fx.yi>0)p.push('沈以诺好感+'+fx.yi);if(fx.yi<0)p.push('沈以诺好感'+fx.yi);if(fx.gr>0)p.push('成长+'+fx.gr);if(fx.gd>0)p.push('花园提升');if(p.length>0){NFT.textContent=p.join('  ');NFT.style.display='block';setTimeout(function(){NFT.style.display='none'},1800)}}
+function adv(){var n=GN(curNode);if(!n)return;if(typing){finishType();return}if(n.ch)return;if(n.nx)playNode(n.nx);else if(n.ed)showEnding(n.ed);else if(n.np)advP(n.np)}
+DLG.addEventListener('click',adv);
+document.addEventListener('keydown',function(e){if(e.key===' '||e.key==='Enter'){e.preventDefault();adv()}});
+function advP(np){if(np==='np'){S.period++;if(S.period>3){S.period=0;S.day++;S.week=Math.ceil(S.day/7);if(S.day>49){calcEnd();return}moodC={}}}else if(np==='nd'){S.period=0;S.day++;S.week=Math.ceil(S.day/7);if(S.day>49){calcEnd();return}moodC={}}var nid='d'+S.day+'_'+PERIODS[S.period];if(SCRIPT[nid])playNode(nid);else genDaily();updSt()}
+function updSt(){DAY_E.textContent='第'+S.day+'天 第'+S.week+'周';PRD_E.textContent=PERIODS[S.period];var ln={room:'房间',rooftop:'天台',corridor:'楼道',store:'便利店',coffee:'咖啡店',park:'公园',company:'公司',su_door:'苏念家门口'};LCT_E.textContent=ln[S.location]||'';var gn=['🌹 荒废','🌱 初春','🌻 盛夏','🌾 丰收'];GRDN_E.textContent=gn[S.garden]}
+
+/* Save/Load */
+function saveGame(slot){var d={S:S,moodC:moodC,curNode:curNode};localStorage.setItem('sn_save'+slot,JSON.stringify(d));notify('\u5df2\u4fdd\u5b58\u5230\u69fd\u4f4d'+slot)}
+function loadGame(slot){var d=JSON.parse(localStorage.getItem('sn_save'+slot));if(!d){notify('\u8be5\u69fd\u4f4d\u4e3a\u7a7a');return}S=d.S;S.readNodes={};curNode=d.curNode;moodC=d.moodC||{};TT.style.display='none';playNode(curNode)}
+function openSave(){var o=document.getElementById('OV-SAVE');o.classList.add('show');var c=document.getElementById('SAVE-SLOTS');c.innerHTML='';for(var i=1;i<=3;i++){var d=localStorage.getItem('sn_save'+i);var info=d?'\u7b2c'+JSON.parse(d).S.day+'\u5929':'\u7a7a';var h='<div class="ss"><div style="font-size:14px">\u69fd\u4f4d '+i+'</div><div style="font-size:12px;color:rgba(255,255,255,.35)">'+info+'</div><div style="margin-top:8px"><button class="sb" onclick="saveGame('+i+')">\u4fdd\u5b58</button></div></div>';c.innerHTML+=h}}
+function openLoad(){var o=document.getElementById('OV-LOAD');o.classList.add('show');var c=document.getElementById('LOAD-SLOTS');c.innerHTML='';for(var i=1;i<=3;i++){var d=localStorage.getItem('sn_save'+i);var info=d?'\u7b2c'+JSON.parse(d).S.day+'\u5929':'\u7a7a';var h='<div class="ss"><div style="font-size:14px">\u69fd\u4f4d '+i+'</div><div style="font-size:12px;color:rgba(255,255,255,.35)">'+info+'</div><div style="margin-top:8px"><button class="sb" onclick="loadGame('+i+')">\u8bfb\u53d6</button></div></div>';c.innerHTML+=h}}
+function closePanel(id){document.getElementById(id).classList.remove('show')}
+function notify(t){NFT.textContent=t;NFT.style.display='block';setTimeout(function(){NFT.style.display='none'},1500)}
+function openSettings(){document.getElementById('OV-SET').classList.add('show')}
+function setSpeed(v){tSpd=[60,45,30,15,5][v-1]}
+function toggleAuto(){autoMode=!autoMode;document.getElementById('AUTO-TGL').classList.toggle('on')}
+function toggleSkip(){skipRead=!skipRead;document.getElementById('SKIP-TGL').classList.toggle('on')}
+
+/* Endings */
+function calcEnd(){
+  var hi='sunian';var hv=S.sunian;
+  if(S.xiaolu>hv){hi='xiaolu';hv=S.xiaolu}
+  if(S.yinuo>hv){hi='yinuo';hv=S.yinuo}
+  if(S.sunian>=71&&S.xiaolu>=71&&S.yinuo>=71&&S.growth>=70){playNode('end_hidden');return}
+  if(S.garden>=3&&(S.sunian>=86||S.xiaolu>=86||S.yinuo>=86)){
+    if(S.sunian>=86){playNode('end_sun_perfect');return}
+    if(S.xiaolu>=86){playNode('end_xia_perfect');return}
+    if(S.yinuo>=86){playNode('end_yin_perfect');return}
+  }
+  if(S.garden>=3&&S.sunian<71&&S.xiaolu<71&&S.yinuo<71){playNode('end_garden');return}
+  if(hv>=86&&S.growth>=50){
+    if(hi==='sunian')playNode('end_sun_good');
+    else if(hi==='xiaolu')playNode('end_xia_good');
+    else playNode('end_yin_good');return;
+  }
+  if(hv>=71&&S.growth<50){
+    if(hi==='sunian')playNode('end_sun_normal');
+    else if(hi==='xiaolu')playNode('end_xia_normal');
+    else playNode('end_yin_normal');return;
+  }
+  if(hv>=56){
+    if(hi==='sunian')playNode('end_sun_friend');
+    else if(hi==='xiaolu')playNode('end_xia_friend');
+    else playNode('end_yin_friend');return;
+  }
+  if(hi==='sunian')playNode('end_sun_bad1');
+  else if(hi==='xiaolu')playNode('end_xia_bad1');
+  else playNode('end_yin_bad1');
+}
+function showEnding(eid){endingsU.add(eid);localStorage.setItem('sn_ends',JSON.stringify([...endingsU]));playNode(eid)}
+
+/* Gallery */
+function openGallery(){
+  var o=document.getElementById('OV-GAL');o.classList.add('show');
+  var c=document.getElementById('GAL-LIST');c.innerHTML='';
+  var ends=[
+    ['end_sun_perfect','\U0001f339 \u5de6\u624b\u8fb9\u7684\u65cb\u5f8b','\u82cf\u5ff5\u00b7\u5b8c\u7f8e\u7ed3\u5c40'],
+    ['end_sun_good','\U0001f339 \u590f\u65e5\u7ec8\u66f2','\u82cf\u5ff5\u00b7\u597d\u7ed3\u5c40'],
+    ['end_sun_normal','\U0001f338 \u672a\u5b8c\u6210\u7684\u66f2\u5b50','\u82cf\u5ff5\u00b7\u666e\u901a\u7ed3\u5c40'],
+    ['end_sun_friend','\U0001f342 \u597d\u90bb\u5c45','\u82cf\u5ff5\u00b7\u53cb\u60c5\u7ed3\u5c40'],
+    ['end_sun_bad1','\U0001f940 \u7434\u5f26\u65ad','\u82cf\u5ff5\u00b7\u574f\u7ed3\u5c40'],
+    ['end_sun_bad2','\U0001f940 \u6c89\u9ed8\u7684\u8d70\u5eca','\u82cf\u5ff5\u00b7\u574f\u7ed3\u5c40'],
+    ['end_xia_perfect','\U0001f33f \u5929\u53f0\u4e0a\u7684\u65b9\u5411','\u6797\u5c0f\u9e7f\u00b7\u5b8c\u7f8e\u7ed3\u5c40'],
+    ['end_xia_good','\U0001f33f \u5c0f\u9e7f\u56de\u6765\u4e86','\u6797\u5c0f\u9e7f\u00b7\u597d\u7ed3\u5c40'],
+    ['end_xia_normal','\U0001f338 \u590f\u5929\u7684\u98ce','\u6797\u5c0f\u9e7f\u00b7\u666e\u901a\u7ed3\u5c40'],
+    ['end_xia_friend','\U0001f342 \u7b14\u53cb','\u6797\u5c0f\u9e7f\u00b7\u53cb\u60c5\u7ed3\u5c40'],
+    ['end_xia_bad1','\U0001f940 \u9003\u79bb','\u6797\u5c0f\u9e7f\u00b7\u574f\u7ed3\u5c40'],
+    ['end_xia_bad2','\U0001f940 \u8ff7\u8def\u7684\u5c0f\u9e7f','\u6797\u5c0f\u9e7f\u00b7\u574f\u7ed3\u5c40'],
+    ['end_yin_perfect','\u2615 Still here','\u6c88\u4ee5\u8bfa\u00b7\u5b8c\u7f8e\u7ed3\u5c40'],
+    ['end_yin_good','\u2615 \u7b2c\u516b\u4e2a\u5ea7\u4f4d','\u6c88\u4ee5\u8bfa\u00b7\u597d\u7ed3\u5c40'],
+    ['end_yin_normal','\U0001f338 \u5e38\u5ba2','\u6c88\u4ee5\u8bfa\u00b7\u666e\u901a\u7ed3\u5c40'],
+    ['end_yin_friend','\U0001f342 \u597d\u5496\u5561\u4e0d\u9700\u8981\u62c9\u82b1','\u6c88\u4ee5\u8bfa\u00b7\u53cb\u60c5\u7ed3\u5c40'],
+    ['end_yin_bad1','\U0001f940 \u6253\u70ca','\u6c88\u4ee5\u8bfa\u00b7\u574f\u7ed3\u5c40'],
+    ['end_yin_bad2','\U0001f940 \u4e00\u5e2d\u4e4b\u5730\u7684\u7a7a','\u6c88\u4ee5\u8bfa\u00b7\u574f\u7ed3\u5c40'],
+    ['end_hidden','\U0001f319 \u590f\u665a\u665a\u98ce','\u9690\u85cf\u7ed3\u5c40'],
+    ['end_garden','\U0001f33b \u82b1\u5f00','\u5929\u53f0\u7ed3\u5c40'],
+    ['end_lonely','\U0001f311 \u4e0d\u4e86\u4e86','\u5b64\u72ec\u7ed3\u5c40']
+  ];
+  for(var i=0;i<ends.length;i++){
+    var e=ends[i];var u=endingsU.has(e[0]);
+    c.innerHTML+='<div class="ei'+(u?'':' locked')+'"><h3>'+e[1]+'</h3><p>'+(u?e[2]:'???')+'</p></div>';
+  }
+}
+
+/* Location choice */
+function showLocations(locs){
+  CHC.innerHTML='';CHC.style.display='flex';DLG.style.cursor='default';
+  for(var i=0;i<locs.length;i++){
+    var l=locs[i];
+    (function(l){
+      var b=document.createElement('button');b.className='ch';b.textContent=l.tx;
+      b.onclick=function(){CHC.style.display='none';DLG.style.cursor='pointer';S.location=l.loc;if(l.fx)applyFx(l.fx);if(l.sf)S.flags[l.sf]=true;playNode(l.nx)};
+      CHC.appendChild(b);
+    })(l);
+  }
+}
+
+/* Start */
+function startGame(){S={day:1,period:0,sunian:0,xiaolu:0,yinuo:0,growth:0,garden:0,flags:{},readNodes:{},location:'room',week:1};moodC={};hist=[];TT.style.display='none';spawnP(20);playNode('d1_morning')}
+
+/* Daily generation */
+function genDaily(){
+  var d=S.day,p=S.period,w=S.week;
+  var isWkday=(d%7>=1&&d%7<=5);
+  var mood={s:getMood('su',d),x:getMood('xi',d),y:getMood('yi',d)};
+  
+  if(p===0){ /* morning */
+    if(isWkday){playNode('wkday_morning');return}
+    else{playNode('wkend_morning');return}
+  }
+  if(p===1){ /* afternoon */
+    if(isWkday){playNode('wkday_afternoon');return}
+    else{playNode('wkend_afternoon');return}
+  }
+  if(p===2){ /* evening */
+    playNode('free_evening');return;
+  }
+  if(p===3){ /* night */
+    playNode('free_night');return;
+  }
+}
+
+/* Close genDaily and start script database */
+var SCRIPT = {
+"d1_morning": {tx:"六月十五日。搬进来的第一天。\n\n闹钟没响——你被热醒了。南方的六月像一个巨大的蒸笼，空气黏腻得能拧出水来。窗外的蝉已经开始了它们的合唱，从早上六点就开始的那种。\n\n你睁开眼，看到的是一个比照片上更小的房间。一张床、一张桌子、一个衣柜。窗户正对着天台。\n\n这就是你的新生活了。",bg:"room",nx:"d1_morning_2"},
+"d1_morning_2": {tx:"你翻身下床，脚踩到冰凉的瓷砖上，清醒了三分。桌上放着昨天便利店买的面包和矿泉水——这就是你的早餐了。\n\n月薪四千五，房租一千二。你默默算了一下，剩下的钱够你活到月底，前提是不点外卖。",sp:"narrator",nx:"d1_morning_3"},
+"d1_morning_3": {tx:"你咬着面包，望向窗外。天台上有一把生锈的折叠椅、几盆枯死的植物、还有一串掉了色的风铃。\n\n那个天台，是谁的花园？",sp:"narrator",ch:[{tx:"（记住了这个地方）",nx:"d1_morning_4a",fx:{gr:2}},{tx:"（跟我的房间一样荒废）",nx:"d1_morning_4b"}]},
+"d1_morning_4a": {tx:"你决定以后有空上去看看。也许是一个不错的发呆地点。\n\n吃完面包，你开始收拾行李。纸箱子还堆在门口，需要一个个搬进屋。",nx:"d1_morning_5"},
+"d1_morning_4b": {tx:"荒废的花园，和刚搬进来的你，倒是挺搭的。\n\n吃完面包，你开始收拾行李。纸箱子还堆在门口，需要一个个搬进屋。",nx:"d1_morning_5"},
+"d1_morning_5": {tx:"你打开502的门，弯腰去够最重的那个箱子。走廊很窄，墙上贴着泛黄的通知。你正使劲拖箱子——",bg:"corridor",hc:true,nx:"d1_meet_sunian"},
+"d1_meet_sunian": {tx:"啊——小心。",sp:"???",char:"sunian_shy",nx:"d1_meet_sunian_2"},
+"d1_meet_sunian_2": {tx:"箱子差点滑下去。一双手稳稳地扶住了它。\n\n你抬头。\n\n齐肩黑发，白色棉麻裙，笑起来眼睛弯弯的，像夏天傍晚吹来的一阵风。",sp:"narrator",char:"sunian_smile",nx:"d1_meet_sunian_3"},
+"d1_meet_sunian_3": {tx:"新搬来的吧？我住对门，501。有什么需要帮忙的可以敲门。",sp:"苏念",char:"sunian",nx:"d1_meet_sunian_choice"},
+"d1_meet_sunian_choice": {tx:"",ch:[{tx:"谢谢。我叫……你好，我叫……",nx:"d1_sunian_intro",fx:{su:3,gr:1}},{tx:"哦，谢谢。",nx:"d1_sunian_cold",fx:{su:-1}},{tx:"（愣了一下）啊……好。",nx:"d1_sunian_shy",fx:{su:1}}]},
+"d1_sunian_intro": {tx:"她笑了。不是那种客气的笑，是真正的、觉得有意思的笑。\n\n嗯，很高兴认识你。\n\n她指了指自己的门。\n\n我叫苏念。以后是邻居了。\n\n苏念。你在心里默念了一遍这个名字。",sp:"narrator",char:"sunian_smile",sf:"met_sunian",nx:"d1_afternoon"},
+"d1_sunian_cold": {tx:"她点点头，没有再说什么。转身回了自己的屋子。\n\n你继续搬箱子。手心还残留着刚才她扶箱子时的温度。",sp:"narrator",sf:"met_sunian",nx:"d1_afternoon"},
+"d1_sunian_shy": {tx:"她看了你一眼，似乎想说什么，最终只是微微笑了一下。\n\n不用紧张，我又不吃人。\n\n她说完就回了501。门关上的时候，你闻到一股很淡的洗衣液的味道。",sp:"narrator",char:"sunian_smile",sf:"met_sunian",nx:"d1_afternoon"},
+"d1_afternoon": {tx:"下午。你终于把所有箱子都拆完了。衣服塞进衣柜，洗漱用品摆好，充电器插上。\n\n房间看起来终于有了一点住过人的痕迹。\n\n你坐在床边，看了一眼手机。下午三点。外面热得像蒸笼，但你觉得自己应该出去走走。",bg:"room",nx:"d1_afternoon_choice"},
+"d1_afternoon_choice": {tx:"",ch:[{tx:"去楼下便利店买点东西",nx:"d1_store",fx:{gr:1}},{tx:"在房间里刷手机",nx:"d1_phone",fx:{gr:-1}},{tx:"去天台看看",nx:"d1_rooftop_first",fx:{gr:2}}]},
+"d1_store": {tx:"你下了楼。楼梯间的墙壁上贴满了各种小广告——开锁的、搬家的、通下水道的。楼道里有一股潮湿的霉味。\n\n便利店在小区门口，隔着一条马路。冰柜里的冷气让你觉得活着真好。你拿了一瓶冰可乐和一包纸巾。",bg:"store",nx:"d1_afternoon_end"},
+"d1_phone": {tx:"你躺在床上刷了两个小时手机。朋友圈里有人在晒毕业旅行的照片，有人在抱怨加班，有人在秀恩爱。\n\n你把手机扣在床上，盯着天花板。\n\n新生活。",sp:"narrator",nx:"d1_afternoon_end"},
+"d1_rooftop_first": {tx:"你爬上五楼，推开了天台的门。\n\n傍晚的阳光把一切都镀成了金色。那把生锈的折叠椅比从窗户看更旧了。几盆植物已经完全枯死，只剩下干巴巴的枝干。风铃被风吹得微微晃动，发出轻微的声响。\n\n但是，空气比楼下好太多了。你能看到远处的城市天际线，还有晚霞。",bg:"sunsetrt",nx:"d1_rooftop_first_2"},
+"d1_rooftop_first_2": {tx:"你在折叠椅上坐下来。椅面被太阳晒得有点烫。\n\n天台上很安静。只有风声和远处的车流声。\n\n你想：以后每天傍晚都可以来坐一会儿。",sp:"narrator",fx:{gr:3},nx:"d1_afternoon_end"},
+"d1_afternoon_end": {tx:"你回到了502。第一天，就这样过去了。\n\n窗外的蝉鸣一直没停。",sp:"narrator",np:"np"},
+"d1_evening": {tx:"傍晚。\n\n你坐在窗边，看着天台上的夕阳。橘色的光一点一点暗下去，天空从橙色变成了紫色，最后变成了深蓝。\n\n楼下的路灯亮了。有人在楼下遛狗，狗链哗啦哗啦响。\n\n这是一个普通的夏夜。你的第一个夏夜。",bg:"evening",nx:"d1_evening_choice"},
+"d1_evening_choice": {tx:"",ch:[{tx:"去天台坐坐",nx:"d1_evening_rooftop",fx:{gr:2}},{tx:"去楼下走走",nx:"d1_evening_walk",fx:{gr:1}},{tx:"在房间里看书",nx:"d1_evening_read",fx:{gr:2}}]},
+"d1_evening_rooftop": {tx:"你爬上了天台。夜风终于凉了下来。\n\n你坐在折叠椅上，仰头看星星。城市的光污染太重，只看得到几颗最亮的。\n\n那串风铃在风里叮叮当当地响。你忽然觉得，这个天台其实还不错。",bg:"rooftop",nx:"d1_evening_end"},
+"d1_evening_walk": {tx:"你下了楼，沿着小区的路慢慢走。路灯把树影投在地上，像一幅抽象画。\n\n小区不大，走一圈也就十分钟。你走的时候，看到三楼有一户人家的窗户亮着，窗帘没拉严，能隐约看到一架钢琴。\n\n谁在三楼弹琴？",nx:"d1_evening_end"},
+"d1_evening_read": {tx:"你从箱子里翻出一本没看完的书。是毕业前在图书馆借的，一直忘了还。\n\n你靠在床头，就着台灯的光看了几页。书里的故事发生在另一个夏天，另一个城市。\n\n你看了一会儿，眼皮开始打架。",fx:{gr:2},nx:"d1_evening_end"},
+"d1_evening_end": {tx:"夜深了。你回到了房间。\n\n第一个夜晚，就这样过去了。",sp:"narrator",np:"np"},
+"d1_night": {tx:"深夜。\n\n你躺在床上，睡不着。\n\n窗外有风。风铃的声音很远很轻，像有人在轻轻叹气。\n\n隔壁501传来很轻很轻的钢琴声。是一首你没听过的曲子，很慢，很温柔。\n\n苏念在弹琴。\n\n你不知道她弹的是什么。但你知道，这是你在这个城市听到的第一个声音。",bg:"night",char:"sunian_piano",fx:{su:2},nx:"d1_night_end"},
+"d1_night_end": {tx:"你闭上眼睛。\n\n蝉鸣、风铃、钢琴声。这就是你的夏天了。\n\n——第1天结束——",sp:"ending",np:"nd"},
+"d2_morning": {tx:"第二天。\n\n你被闹钟吵醒了。六点半。\n\n窗外还是灰蒙蒙的，但蝉已经醒了。它们比你勤快多了。\n\n今天是周末。不用去公司。你翻了个身，想再睡一会儿，但怎么也睡不着了。",bg:"morning",nx:"d2_morning_2"},
+"d2_morning_2": {tx:"你起来洗漱。水龙头出来的水一开始是温的，过了一会儿才变凉。\n\n你刷牙的时候，听到走廊里有动静。很轻的脚步声，然后是天台的门被推开的声音。",sp:"narrator",nx:"d2_morning_choice"},
+"d2_morning_choice": {tx:"",ch:[{tx:"去天台看看是谁",nx:"d2_meet_xiaolu",fx:{gr:2}},{tx:"不管，继续洗漱",nx:"d2_ignore",fx:{gr:-1}}]},
+"d2_meet_xiaolu": {tx:"你推开天台的门。\n\n一个女孩正蹲在角落里，背对着你。马尾辫，背带裤，帆布包上别着一堆花花绿绿的徽章。\n\n她正往一个花盆里浇水。\n\n听到门响，她吓了一跳，猛地转过身来。",bg:"rooftop",nx:"d2_meet_xiaolu_2"},
+"d2_meet_xiaolu_2": {tx:"哇！你、你是谁！",sp:"???",char:"xiaolu_confused",nx:"d2_meet_xiaolu_3"},
+"d2_meet_xiaolu_3": {tx:"她手里还拿着一个矿泉水瓶，瓶盖上扎了几个小孔，大概是用来浇水的。\n\n圆脸，大眼睛，笑起来应该有小虎牙。但此刻她看起来像一只受惊的小动物。",sp:"narrator",char:"xiaolu_confused",nx:"d2_meet_xiaolu_4"},
+"d2_meet_xiaolu_4": {tx:"我、我住502，昨天刚搬来的。你呢？",sp:"narrator",nx:"d2_meet_xiaolu_5"},
+"d2_meet_xiaolu_5": {tx:"她眨了眨眼睛，然后忽然笑了。露出两颗小虎牙。\n\n哦！你是新搬来的呀！吓死我了，我以为是保安呢。\n\n她站起来，拍了拍膝盖上的土。",sp:"narrator",char:"xiaolu_happy",nx:"d2_meet_xiaolu_6"},
+"d2_meet_xiaolu_6": {tx:"我叫林小鹿！小鹿斑比的那个小鹿。我……嗯，我就是来浇花的。\n\n她指了指角落里那些看起来快要死掉的植物。\n\n这些花以前是我外婆种的。后来外婆不住这里了，花也没人管了。我暑假没事做，就来帮它们浇浇水。",sp:"林小鹿",char:"xiaolu",nx:"d2_meet_xiaolu_choice",sf:"met_xiaolu"},
+"d2_meet_xiaolu_choice": {tx:"",ch:[{tx:"这些花还能救活吗？",nx:"d2_xiaolu_flower",fx:{xi:3,gr:1}},{tx:"你暑假不回家吗？",nx:"d2_xiaolu_home",fx:{xi:2}},{tx:"那你继续浇吧，我先下去了。",nx:"d2_xiaolu_leave",fx:{xi:-1}}]},
+"d2_xiaolu_flower": {tx:"她的眼睛亮了起来。\n\n能的！你看这盆绿萝，根还是绿的，说明还活着。只要每天浇水、晒太阳，过几天就能冒出新芽了。\n\n她蹲下来，小心翼翼地拨开枯叶，露出下面一点点绿色。\n\n植物比你想的坚强多了。",sp:"林小鹿",char:"xiaolu_happy",nx:"d2_morning_end"},
+
+
+"d2_xiaolu_home": {tx:"她的表情微妙地变了一下。很快就恢复了。\n\n\"嗯……不回。暑假有事情要做。\"\n\n她没有说是什么事情。你注意到她浇水的手停了一下。",sp:"林小鹿",char:"xiaolu",nx:"d2_morning_end"},
+"d2_xiaolu_leave": {tx:"\"哦，好。\"\n\n她的声音听起来有点失落。但你已经转身走了。\n\n也许以后会在天台再碰到她。",sp:"narrator",nx:"d2_morning_end"},
+"d2_morning_end": {tx:"你回到了502。窗外的阳光已经很烈了。\n\n新认识了两个人。苏念和林小鹿。一个住在对门，一个在天台浇花。\n\n这个小区，好像没有你想象的那么无聊。",sp:"narrator",np:"np"},
+"d2_ignore": {tx:"你继续洗漱。走廊里的脚步声渐渐远了。\n\n也许是什么人吧。跟你无关。",sp:"narrator",np:"np"},
+
+"d2_afternoon": {tx:"下午。阳光把房间烤得像个蒸笼。你开了风扇，但吹出来的全是热风。\n\n你想做点什么，但热得什么都不想做。",bg:"room",nx:"d2_afternoon_choice"},
+"d2_afternoon_choice": {tx:"",ch:[
+  {tx:"去便利店买冰棍",nx:"d2_store2",fx:{gr:1}},
+  {tx:"去咖啡店坐坐",nx:"d2_coffee_first",fx:{gr:1}},
+  {tx:"在房间里躺着",nx:"d2_lazy"}
+]},
+"d2_store2": {tx:"你下楼买了一根盐水冰棍。一块钱。你在便利店门口蹲着吃，看着马路对面的行人。\n\n有一只橘猫从你面前走过，看了你一眼，然后头也不回地走了。\n\n这个城市对你也一样——看了你一眼，然后头也不回。",bg:"store",nx:"d2_afternoon_end"},
+"d2_coffee_first": {tx:"你推开了\"一席之地\"的门。店面很小，只有八个高脚凳围着一个L形的吧台。墙上挂着几幅黑白照片，拍的都是咖啡豆。\n\n吧台后面站着一个短发女生，穿黑色T恤，正在磨咖啡豆。她没有抬头。",bg:"coffee",nx:"d2_coffee_first_2"},
+"d2_coffee_first_2": {tx:"\"坐。\"\n\n她只说了一个字。声音很低，带着一点沙哑。\n\n你坐下来，看了看菜单。手冲咖啡25到40块不等。没有拿铁，没有卡布奇诺，没有拉花。",sp:"沈以诺",char:"yinuo_cool",nx:"d2_coffee_first_choice"},
+"d2_coffee_first_choice": {tx:"",ch:[
+  {tx:"来一杯最便宜的",nx:"d2_coffee_cheap",fx:{yi:2}},
+  {tx:"你这里不卖拿铁吗？",nx:"d2_coffee_latte",fx:{yi:-1}},
+  {tx:"（安静地看菜单）",nx:"d2_coffee_quiet",fx:{yi:1}}
+]},
+"d2_coffee_cheap": {tx:"她看了你一眼。嘴角微微动了一下，不知道是不是在笑。\n\n\"耶加雪菲，日晒。二十五。\"\n\n她开始做咖啡。动作很熟练，但不紧不慢。水温、研磨度、注水速度，每一步都精确得像在做实验。\n\n五分钟后，一杯手冲放在你面前。",sp:"沈以诺",char:"yinuo_coffee",nx:"d2_coffee_end"},
+"d2_coffee_latte": {tx:"她停下手里的动作，看了你一眼。\n\n\"咖啡又不是用来拍照的。\"\n\n她的语气不重，但你感觉自己问了一个很蠢的问题。",sp:"沈以诺",char:"yinuo_cool",nx:"d2_coffee_end2"},
+"d2_coffee_quiet": {tx:"你安静地看了一会儿菜单。她也没有催你。\n\n最后你指着\"耶加雪菲\"说：就这个吧。\n\n她点点头，开始做咖啡。全程没有多余的话。",sp:"narrator",char:"yinuo_coffee",nx:"d2_coffee_end"},
+"d2_coffee_end": {tx:"你喝了一口。有点酸，有点果香。跟你以前喝的速溶完全不同。\n\n好喝吗？她问。\n\n好喝。你说。\n\n她没再说什么，转身去擦杯子了。\n\n你付了钱，走出咖啡店。阳光刺得你眯了一下眼。\n\n25块。有点贵。但值得。",sp:"narrator",sf:"met_yinuo",fx:{yi:3,gr:1},nx:"d2_afternoon_end"},
+"d2_coffee_end2": {tx:"你沉默了一会儿。\n\n\"那……来一杯手冲吧。\"\n\n她没有追问，开始做咖啡。\n\n你喝了一口。确实跟速溶不一样。但你不确定自己喜不喜欢这种酸味。\n\n付了钱，走出门。你决定下次再来试试别的。",sp:"narrator",sf:"met_yinuo",fx:{yi:1},nx:"d2_afternoon_end"},
+"d2_lazy": {tx:"你躺在床上，刷了两个小时手机。看了三个短视频，打了两把游戏，然后睡着了。\n\n醒来的时候已经是傍晚了。",sp:"narrator",fx:{gr:-1},np:"np"},
+"d2_afternoon_end": {tx:"你回到了502。窗外的阳光开始变软了。\n\n今天认识了第三个人——沈以诺。那个开咖啡店的酷女生。\n\n三个女孩。三种不同的温度。",sp:"narrator",np:"np"},
+
+"d2_evening": {tx:"傍晚。天台上。\n\n你坐在折叠椅上，看着夕阳一点一点沉下去。今天的晚霞特别好看，整片天空都是橘红色的。\n\n楼下有人在炒菜，油烟味顺着窗缝飘上来。",bg:"evening",nx:"d2_evening_2"},
+"d2_evening_2": {tx:"你听到天台的门响了。\n\n回头一看——是林小鹿。她手里拿着一个塑料袋，里面装着什么绿油油的东西。\n\n\"啊！又是你！\"",sp:"林小鹿",char:"xiaolu_happy",nx:"d2_evening_choice"},
+"d2_evening_choice": {tx:"",ch:[
+  {tx:"你又来浇花？",nx:"d2_eve_xiaolu1",fx:{xi:2}},
+  {tx:"（点点头，继续看夕阳）",nx:"d2_eve_xiaolu2",fx:{xi:1}},
+  {tx:"那个袋子里是什么？",nx:"d2_eve_xiaolu3",fx:{xi:3}}
+]},
+"d2_eve_xiaolu1": {tx:"\"对呀！傍晚浇水最好了，不会把叶子晒伤。\"\n\n她蹲到角落里，开始一盆一盆地浇。你注意到她的动作很仔细，每盆浇多少水都不同。\n\n\"这盆要少浇一点，根还没长好。这盆可以多浇一点，土太干了。\"\n\n她一边浇一边念叨。好像在跟植物说话。",sp:"林小鹿",char:"xiaolu_plant",nx:"d2_evening_end"},
+"d2_eve_xiaolu2": {tx:"她走到你旁边，也看着夕阳。\n\n\"真好看。\"\n\n你们两个人就这样安静地看了一会儿。蝉鸣声从远处传来，被风吹散了。",sp:"narrator",char:"xiaolu",nx:"d2_evening_end"},
+"d2_eve_xiaolu3": {tx:"\"这个？\"\n\n她把袋子打开给你看。里面是几包种子和一小袋营养土。\n\n\"我今天去花鸟市场买的！要给天台种点新的东西。你看，这是向日葵种子，这是薄荷，这是……呃，这个我忘了是什么了。\"\n\n她笑得眼睛弯弯的。",sp:"林小鹿",char:"xiaolu_happy",fx:{gd:1},nx:"d2_evening_end"},
+"d2_evening_end": {tx:"你们在天台上待到天完全黑了。路灯亮起来的时候，她拍了拍裙子上的土，说要走了。\n\n\"明天见！\"\n\n她挥挥手，蹦蹦跳跳地下楼了。\n\n你坐在椅子上，看着她消失在楼梯口。风铃在身后叮叮当当地响。",sp:"narrator",np:"np"},
+
+"d2_night": {tx:"深夜。你躺在床上。\n\n隔壁501又传来钢琴声了。比昨晚更清晰一些。\n\n是一首很慢的曲子。每一个音符都像是从水里捞出来的，湿漉漉的，带着回响。\n\n你不知道这首曲子叫什么名字。但你觉得，它听起来像是一个人在深夜里自言自语。",bg:"night",char:"sunian_piano",fx:{su:1},nx:"d2_night_end"},
+"d2_night_end": {tx:"你闭上眼睛。\n\n这个夏天才刚开始。但你已经觉得，它会很长很长。\n\n——第2天结束——",sp:"ending",np:"nd"},
+"d3_morning": {tx:"第三天。周一。你要去上班了。\n\n闹钟六点响。你挣扎着爬起来，洗漱，换上唯一的白衬衫。出门的时候在走廊碰到苏念。",bg:"morning",char:"sunian",nx:"d3_morning_2"},
+"d3_morning_2": {tx:"早。去上班？\n\n她手里拎着一个环保袋，大概是去买菜。穿着一件宽松的白T恤和阔腿裤，头发还没完全干。\n\n嗯，第一天。",sp:"苏念",nx:"d3_morning_choice"},
+"d3_morning_choice": {tx:"",ch:[{tx:"你不用上班吗？",nx:"d3_m_sunian1",fx:{su:2}},{tx:"（点点头）嗯。",nx:"d3_m_sunian2"},{tx:"你头发还没干呢。",nx:"d3_m_sunian3",fx:{su:3}}]},
+"d3_m_sunian1": {tx:"她笑了。\n\n我下午才有课。教小朋友弹琴。\n\n她的手指无意识地动了一下，像是在弹一个看不见的琴键。\n\n加油。",sp:"苏念",char:"sunian_smile",nx:"d3_work"},
+"d3_m_sunian2": {tx:"她点点头，没有再说什么。你们在楼梯口分开了。\n\n你回头看了一眼，她正往楼下走，脚步很轻。",sp:"narrator",nx:"d3_work"},
+"d3_m_sunian3": {tx:"她愣了一下，然后摸了摸自己的头发。\n\n啊……早上洗的，来不及吹干。\n\n她的耳朵微微红了一点。\n\n走了，拜拜。\n\n她几乎是小跑着下了楼。",sp:"narrator",char:"sunian_shy",fx:{su:2},nx:"d3_work"},
+"d3_work": {tx:"公司很小，在一栋写字楼的七楼。你的工位靠窗。运营助理，说白了就是打杂的。\n\n午饭是公司楼下的一碗粉，八块钱，加一个卤蛋两块。\n\n下午继续打杂。五点半下班。",bg:"company",np:"np"},
+"d3_evening": {tx:"傍晚回到小区。楼道里有饭菜的香味。三楼有人在炖排骨。你咽了一下口水——今晚打算煮泡面。",bg:"evening",nx:"d3_evening_choice"},
+"d3_evening_choice": {tx:"",ch:[{tx:"去天台坐坐",nx:"d3_eve_rooftop",fx:{gr:2}},{tx:"去便利店买关东煮",nx:"d3_eve_store",fx:{gr:1}},{tx:"直接回房间",nx:"d3_eve_room"}]},
+"d3_eve_rooftop": {tx:"天台上没有人。夕阳正在西沉，把一切都染成了金色。\n\n你在折叠椅上坐下来，看着远处的城市。\n\n一个人坐在这里看夕阳，其实也挺好的。",bg:"sunsetrt",nx:"d3_evening_end"},
+"d3_eve_store": {tx:"便利店关东煮只剩最后几串了——两个鱼丸，一个白萝卜。你全买了，六块钱。\n\n蹲在门口吃的时候，那只橘猫又出现了。",bg:"store",nx:"d3_evening_end"},
+"d3_eve_room": {tx:"你回到502，煮了一碗泡面。加了一个鸡蛋和半根火腿肠。\n\n吃完面，你坐在窗边，看着天台上的风铃发呆。",sp:"narrator",nx:"d3_evening_end"},
+"d3_evening_end": {tx:"夜幕降临了。又是普通的一天。",sp:"narrator",np:"np"},
+"d3_night": {tx:"深夜。你正在看手机，忽然听到走廊里有脚步声。然后是天台的门被推开的声音。\n\n这么晚了，谁还去天台？",bg:"night",nx:"d3_night_choice"},
+"d3_night_choice": {tx:"",ch:[{tx:"去看看",nx:"d3_night_rooftop",fx:{gr:2}},{tx:"不管",nx:"d3_night_sleep",np:"nd"}]},
+"d3_night_rooftop": {tx:"你轻轻推开门。天台上站着一个人——是林小鹿。\n\n她蹲在角落里，面前放着那几盆枯萎的植物。月光照在她身上，她的肩膀在微微发抖。\n\n她好像……在哭？",bg:"rooftop",char:"xiaolu_sad",nx:"d3_night_choice2"},
+"d3_night_choice2": {tx:"",ch:[{tx:"（轻轻走过去）你怎么了？",nx:"d3_night_ask",fx:{xi:5}},{tx:"（默默站在旁边）",nx:"d3_night_stand",fx:{xi:3}},{tx:"（悄悄退出去）",nx:"d3_night_leave"}]},
+"d3_night_ask": {tx:"她吓了一跳，猛地抬头。脸上有泪痕，但很快就用手背擦掉了。\n\n没、没事！我就是……沙子进眼睛了！\n\n她说着，又低下了头。\n\n……其实是我外婆。这些花是她种的。她……两年前走了。\n\n她的声音很轻，轻得像风铃。",sp:"林小鹿",char:"xiaolu_sad",sf:"xiaolu_secret",nx:"d3_night_end"},
+"d3_night_stand": {tx:"你没有说话。只是站在她旁边，看着天上的月亮。\n\n过了一会儿，她自己开口了。\n\n……你有没有那种感觉，突然不知道自己在干嘛？\n\n你没有回答。但她好像也不需要你回答。",sp:"narrator",char:"xiaolu_sad",sf:"xiaolu_secret",nx:"d3_night_end"},
+"d3_night_leave": {tx:"你悄悄退出去了。有些时候，一个人哭的时候，不需要别人看到。\n\n你回到房间，关上门。隔壁的钢琴声又响起来了。",sp:"narrator",nx:"d3_night_end2"},
+"d3_night_end": {tx:"你们在天台上坐了很久。她没有再说什么，你也没有问。\n\n最后她站起来，拍了拍裙子。\n\n谢谢你。\n\n她下楼了。你一个人坐在天台上，风铃在风里轻轻响着。\n\n——第3天结束——",sp:"ending",np:"nd"},
+"d3_night_end2": {tx:"今晚的钢琴声比前两天更慢了。像是在为什么事情犹豫。\n\n你听着听着，睡着了。\n\n——第3天结束——",sp:"ending",np:"nd"},
+"d4_morning": {tx:"第四天。你已经习惯了南方的潮湿和蝉鸣。\n\n闹钟响的时候你甚至没有挣扎就起来了。洗漱、出门、买早餐、上班。一切都变成了routine。",bg:"morning",np:"np"},
+"d4_evening": {tx:"傍晚回到小区。楼道里碰到了苏念，她刚下课回来，手里拎着一袋水果。\n\n你吃葡萄吗？我买多了。",sp:"苏念",char:"sunian_smile",nx:"d4_evening_choice"},
+"d4_evening_choice": {tx:"",ch:[{tx:"好啊，谢谢。",nx:"d4_eve_yes",fx:{su:3}},{tx:"不了，谢谢。",nx:"d4_eve_no"},{tx:"你总是这么客气吗？",nx:"d4_eve_tease",fx:{su:2}}]},
+"d4_eve_yes": {tx:"她从袋子里抓了一大把葡萄塞给你。\n\n洗了再吃。\n\n她笑了笑，回了501。\n\n你回到房间，把葡萄洗了。很甜。",sp:"narrator",nx:"d4_night"},
+"d4_eve_no": {tx:"好吧。\n\n她没有坚持，回了自己的屋子。\n\n你回到房间，忽然有点后悔。",sp:"narrator",nx:"d4_night"},
+"d4_eve_tease": {tx:"她愣了一下，然后笑了出来。\n\n习惯了。我妈说我从小就这样，别人不收我的东西我浑身难受。\n\n她把葡萄往你手里一塞，转身就走了。\n\n不许还回来！",sp:"苏念",char:"sunian_smile",nx:"d4_night"},
+"d4_night": {tx:"深夜。你躺在床上，听到隔壁传来钢琴声。\n\n今天弹的是一首很快的曲子。指法很流畅，像是从指尖自然流出来的。\n\n但中间有一个地方，忽然停了一下。好像弹错了。然后又继续了。",bg:"night",fx:{su:1},np:"nd"},
+"d5_morning": {tx:"第五天。你开始适应了这份工作。\n\n虽然工资不高，但同事还行，老板也不算太苛刻。唯一的缺点是——每天中午不知道吃什么。",bg:"morning",np:"np"},
+"d5_evening": {tx:"你推开咖啡店的门。沈以诺正在擦杯子。\n\n她看了你一眼，没有说话，但把你昨天坐的那个位置指了指。\n\n老样子？",sp:"沈以诺",char:"yinuo_cool",nx:"d5_evening_choice"},
+"d5_evening_choice": {tx:"",ch:[{tx:"嗯，老样子。",nx:"d5_eve_same",fx:{yi:2}},{tx:"换一个试试",nx:"d5_eve_new",fx:{yi:1}},{tx:"你记得我昨天喝的什么？",nx:"d5_eve_remember",fx:{yi:3}}]},
+"d5_eve_same": {tx:"她点点头，开始做咖啡。\n\n你坐在吧台前，看着她磨豆、称重、注水。每一个动作都很精确，但又很自然。\n\n你的手法很专业。你忍不住说。\n\n做过功课的人才会这么说。她头也不抬。",sp:"沈以诺",char:"yinuo_coffee",nx:"d5_night"},
+"d5_eve_new": {tx:"试试肯尼亚？酸度会高一点。\n\n她推荐了一款。你喝了一口——确实更酸，但有一种很特别的莓果味。\n\n好喝。\n\n嗯。她转身去忙别的了。",sp:"沈以诺",char:"yinuo_coffee",nx:"d5_night"},
+"d5_eve_remember": {tx:"她手上的动作停了一下。\n\n……店里一共就八种豆子。\n\n她的语气很平淡，但你注意到她转身的时候，嘴角好像动了一下。",sp:"沈以诺",char:"yinuo_smile",nx:"d5_night"},
+"d5_night": {tx:"深夜。你被一阵钢琴声吵醒了。\n\n不是苏念平时弹的那种温柔的曲子。这一次，声音更激烈、更复杂。\n\n像是在挣扎。\n\n弹到一半的时候，忽然停了。然后是一声很轻的、压抑的叹息。\n\n接着，一切归于寂静。",bg:"night",char:"sunian_piano",fx:{su:2},sf:"piano_stop",np:"nd"},
+"d6_morning": {tx:"第六天。周五。明天就不用上班了。\n\n你出门的时候在走廊里碰到一个老太太，住503的。她拉着你聊了十分钟，主要是问你有没有女朋友。",bg:"morning",np:"np"},
+"d6_evening": {tx:"傍晚。天台上。你看到了林小鹿。\n\n她正蹲在角落里，手里拿着一把小铲子，认真地给花盆松土。\n\n嘿！你来啦！你看，发芽了！",sp:"林小鹿",char:"xiaolu_happy",nx:"d6_evening_choice"},
+"d6_evening_choice": {tx:"",ch:[{tx:"真的诶！是什么种子？",nx:"d6_eve_seed",fx:{xi:3,gd:1}},{tx:"你每天都来吗？",nx:"d6_eve_daily",fx:{xi:2}},{tx:"（蹲下来看）嗯，不错。",nx:"d6_eve_look",fx:{xi:1}}]},
+"d6_eve_seed": {tx:"薄荷！\n\n她蹲下来，小心翼翼地用手指碰了碰那棵嫩芽。\n\n我外婆以前最喜欢薄荷。她说薄荷好养活，只要给水就能活。\n\n等它长大了，我摘给你泡茶喝！",sp:"林小鹿",char:"xiaolu_happy",nx:"d6_night"},
+"d6_eve_daily": {tx:"对呀！暑假嘛，又没什么事做。\n\n她坐在地上，把铲子放在一边。\n\n其实……我也不知道为什么每天都想来。可能是……这里有我外婆的味道吧。\n\n她说完自己先笑了。\n\n啊！我怎么又说这种话了！",sp:"林小鹿",char:"xiaolu",nx:"d6_night"},
+"d6_eve_look": {tx:"她看着你，好像有点意外你只是嗯了一声。\n\n你……不觉得很神奇吗？这么小的芽，以后能长成一棵大薄荷诶！\n\n她的语气里有一种认真的兴奋。你忍不住笑了。",sp:"林小鹿",char:"xiaolu_confused",nx:"d6_night"},
+"d6_night": {tx:"深夜。你躺在床上。\n\n隔壁没有钢琴声。安静得有点不习惯。\n\n你翻了个身，看向窗外。天台上，风铃在月光里轻轻摇晃。\n\n——第6天结束——",bg:"night",np:"nd"},
+"d7_morning": {tx:"第七天。周六。\n\n你醒来的时候已经九点了。阳光从窗帘缝里钻进来，在地上画了一条亮线。\n\n窗外的蝉鸣像一个永不结束的合唱。你决定今天不设闹钟，想睡到几点就睡到几点。",bg:"morning",nx:"d7_morning_choice"},
+"d7_morning_choice": {tx:"",ch:[{tx:"去天台浇花",nx:"d7_m_water",fx:{gr:2,gd:1}},{tx:"去咖啡店坐坐",nx:"d7_m_coffee",fx:{yi:2}},{tx:"赖床",nx:"d7_m_sleep"}]},
+"d7_m_water": {tx:"你爬上天台，拿了林小鹿留下的矿泉水瓶，开始给花浇水。\n\n薄荷苗已经长高了一点。你蹲下来看了很久。\n\n生命真的是很神奇的东西。",bg:"rooftop",nx:"d7_afternoon"},
+"d7_m_coffee": {tx:"你去了咖啡店。沈以诺在看一本书。\n\n她抬眼看了你一下，然后指了指吧台上的一个杯子。\n\n刚做好的。你运气不错。",sp:"沈以诺",char:"yinuo_coffee",fx:{yi:2},nx:"d7_afternoon"},
+"d7_m_sleep": {tx:"你赖到十一点才起来。\n\n窗外的阳光已经很烈了。你洗了把脸，开始想今天做什么。",sp:"narrator",nx:"d7_afternoon"},
+"d7_afternoon": {tx:"下午。阳光把一切都烤得发软。\n\n你待在房间里，开着风扇，看了一下午的书。\n\n偶尔能听到隔壁苏念在练琴。是一首你没听过的曲子，很慢，很温柔。",bg:"afternoon",fx:{su:1,gr:1},np:"np"},
+"d7_evening": {tx:"傍晚。天台上。\n\n夕阳正在西沉。你坐在折叠椅上，看着天空从橘色变成紫色。\n\n风铃在风里叮叮当当地响。\n\n第一周就这样过去了。你认识了三个女孩，开始了一份新工作，找到了一个属于自己的天台。\n\n这个夏天，好像才刚刚开始。",bg:"sunsetrt",fx:{gr:3},np:"np"},
+"d7_night": {tx:"深夜。你没有回房间。\n\n你坐在天台的折叠椅上，仰头看星星。城市的光污染太重，只看得到几颗最亮的。\n\n风铃在风里响了一整夜。你第一次在天台上坐到了凌晨。\n\n第一周结束。\n\n——第7天结束——",bg:"rooftop",sf:"week1_done",np:"nd"},
+
+"wkday_morning": {tx:"工作日的早晨总是差不多。闹钟、洗漱、出门。路边的早餐摊冒着热气。你买了一个肉包和一杯豆浆，三块钱。",bg:"morning",nx:"wkday_morning_choice"},
+"wkday_morning_choice": {tx:"",ch:[{tx:"边走边吃",nx:"wkday_walk_eat",fx:{gr:1}},{tx:"去咖啡店买杯咖啡",nx:"wkday_coffee",fx:{yi:2}},{tx:"快点去公司",nx:"wkday_hurry"}]},
+"wkday_walk_eat": {tx:"你一边走一边吃包子。肉馅很烫，你吸了好几口气才咽下去。路上的行人匆匆忙忙的，每个人都在赶路。",sp:"narrator",np:"np"},
+"wkday_coffee": {tx:"你推开了咖啡店的门。沈以诺正在磨豆子。她看到你，指了指角落的位置。赶时间的话，今天给你做个快的。五分钟后，一杯手冲放在你面前。",sp:"沈以诺",char:"yinuo_coffee",fx:{yi:2},np:"np"},
+"wkday_hurry": {tx:"你加快脚步，赶在打卡前一分钟到了公司。坐在工位上，你松了口气。又是打杂的一天。",sp:"narrator",np:"np"},
+"wkday_afternoon": {tx:"下午五点半，下班。外面的阳光还很烈。今天想做什么？",bg:"afternoon",nx:"wkday_afternoon_choice"},
+"wkday_afternoon_choice": {tx:"",ch:[{tx:"去天台坐坐",nx:"wkday_rooftop",fx:{gr:2}},{tx:"去咖啡店",nx:"wkday_coffee_eve",fx:{yi:2}},{tx:"去公园跑步",nx:"wkday_park",fx:{gr:3}},{tx:"直接回家",nx:"wkday_home"}]},
+"wkday_rooftop": {tx:"你爬上天台。有时候林小鹿在，有时候不在。今天她不在。你坐在折叠椅上，看着夕阳一点一点沉下去。一个人的天台，也很安静。",bg:"sunsetrt",np:"np"},
+"wkday_coffee_eve": {tx:"你去了咖啡店。沈以诺看了你一眼，没有说话，开始做咖啡。你坐在吧台前，看着她做咖啡的动作。很安静，很专注。",bg:"coffee",char:"yinuo_coffee",fx:{yi:1},np:"np"},
+"wkday_park": {tx:"你去公园跑了一圈。公园不大，绕一圈大概两公里。你跑得很慢，但出了一身汗。跑完之后你坐在长椅上，看着天边的晚霞。运动完的感觉真好。",bg:"park",fx:{gr:3},np:"np"},
+"wkday_home": {tx:"你回到502，煮了一碗面。吃完面，你靠在窗边，看着天台上的风铃发呆。又是普通的一天。",sp:"narrator",np:"np"},
+"wkend_morning": {tx:"周末的早晨。你没有设闹钟，睡到了自然醒。阳光从窗帘缝里钻进来，在地上画了一条亮线。今天不用上班。你想做什么？",bg:"morning",nx:"wkend_morning_choice"},
+"wkend_morning_choice": {tx:"",ch:[{tx:"去天台浇花",nx:"wkend_water",fx:{gr:2,gd:1}},{tx:"去咖啡店坐坐",nx:"wkend_coffee",fx:{yi:2}},{tx:"去公园散步",nx:"wkend_park",fx:{gr:2}},{tx:"赖床",nx:"wkend_sleep"}]},
+"wkend_water": {tx:"你爬上天台，拿了矿泉水瓶开始浇花。薄荷苗又长高了一点。你蹲下来看了很久。有时候你会想，照顾一盆植物，跟照顾一段关系，是不是差不多？都需要耐心，都需要时间。",bg:"rooftop",np:"np"},
+"wkend_coffee": {tx:"你去了咖啡店。沈以诺在看书。你坐下来，她没有抬头，但指了指吧台上的一个杯子。刚做好的。你喝了一口。是新的豆子，有一种坚果的香味。",bg:"coffee",char:"yinuo_coffee",np:"np"},
+"wkend_park": {tx:"你去公园散步。公园里有很多人——遛狗的、跑步的、带小孩的。你走在树荫下，听着鸟叫声。偶尔会觉得，这个城市其实也挺好的。",bg:"park",np:"np"},
+"wkend_sleep": {tx:"你赖到了中午才起来。洗了把脸，开始想今天做什么。",sp:"narrator",np:"np"},
+"wkend_afternoon": {tx:"下午。阳光很烈。你想找点事情做。",bg:"afternoon",nx:"wkend_afternoon_choice"},
+"wkend_afternoon_choice": {tx:"",ch:[{tx:"去看苏念有没有在家",nx:"wkend_visit_sunian",fx:{su:2},cd:{sm:5}},{tx:"去天台看看林小鹿",nx:"wkend_visit_xiaolu",fx:{xi:2},cd:{xm:5}},{tx:"去咖啡店",nx:"wkend_visit_yinuo",fx:{yi:2},cd:{ym:5}},{tx:"在房间里看书",nx:"wkend_read",fx:{gr:3}}]},
+"wkend_visit_sunian": {tx:"你敲了敲501的门。门开了。苏念穿着一件宽松的T恤，头发有点乱。啊……是你。有什么事吗？",sp:"苏念",char:"sunian_shy",nx:"wkend_sunian_chat"},
+"wkend_sunian_chat": {tx:"她让你进去了。房间比你想象的更干净。一架立式钢琴靠在墙边，琴盖是打开的。桌上放着几本琴谱和一杯凉掉的茶。坐吧。她指了指床边的椅子。",sp:"narrator",char:"sunian",nx:"wkend_sunian_choice"},
+"wkend_sunian_choice": {tx:"",ch:[{tx:"你刚才在弹琴吗？",nx:"wkend_sunian_piano",fx:{su:2}},{tx:"你的房间好干净",nx:"wkend_sunian_clean",fx:{su:1}},{tx:"（安静地坐着）",nx:"wkend_sunian_quiet",fx:{su:3}}]},
+"wkend_sunian_piano": {tx:"她看了一眼钢琴。嗯……在练一首新曲子。她的手指无意识地动了一下。你注意到她左手无名指上有一个旧茧。弹得怎么样？还行吧。她笑了一下，但笑容里有一种说不清的味道。",sp:"苏念",char:"sunian_think",nx:"free_afternoon"},
+"wkend_sunian_clean": {tx:"她愣了一下，然后笑了。谢谢。其实是因为你来了我才收拾的。她说完好像觉得不太对，耳朵微微红了一下。……我是说，平时也很干净。",sp:"苏念",char:"sunian_shy",nx:"free_afternoon"},
+"wkend_sunian_quiet": {tx:"你们安静地坐了一会儿。窗外有风，吹得窗帘微微飘动。过了一会儿，她开口了。……你知道吗，有时候我觉得，安静地跟一个人待在一起，比说很多话更舒服。",sp:"苏念",char:"sunian",nx:"free_afternoon"},
+"wkend_visit_xiaolu": {tx:"你爬上天台。林小鹿果然在。她蹲在角落里，正在给一盆植物换土。嘿！你来得正好！帮我扶一下这个花盆！",sp:"林小鹿",char:"xiaolu_happy",nx:"wkend_xiaolu_chat"},
+"wkend_xiaolu_chat": {tx:"你帮她扶着花盆，她小心翼翼地把植物从旧盆里取出来，放进新盆，填上土。搞定！她拍拍手上的土，笑得眼睛弯弯的。你看，这盆薄荷已经长这么高了！",sp:"林小鹿",char:"xiaolu_happy",nx:"wkend_xiaolu_choice"},
+"wkend_xiaolu_choice": {tx:"",ch:[{tx:"长得真快",nx:"wkend_xiaolu_grow",fx:{xi:2,gd:1}},{tx:"你暑假到底在做什么？",nx:"wkend_xiaolu_ask",fx:{xi:1}},{tx:"需要我帮忙吗？",nx:"wkend_xiaolu_help",fx:{xi:3}}]},
+"wkend_xiaolu_grow": {tx:"对吧！她蹲下来，用手指轻轻碰了碰薄荷的叶子。我外婆说，薄荷是最好养的植物。只要有水、有阳光，它就能活。我觉得我外婆也是一样的人。不管遇到什么事，都能活得好好的。",sp:"林小鹿",char:"xiaolu",nx:"free_afternoon"},
+"wkend_xiaolu_ask": {tx:"她的表情变了一下。很快就恢复了。就……浇花啊。她没有看你说。你知道她没有说实话。但你没有追问。",sp:"narrator",char:"xiaolu",nx:"free_afternoon"},
+"wkend_xiaolu_help": {tx:"她眼睛亮了。真的吗？那太好了！她拉着你在天台上转了一圈，给你介绍每一盆植物的名字和习性。你听着，偶尔点点头。其实你大部分都记不住，但你不想打断她的兴致。",sp:"林小鹿",char:"xiaolu_happy",nx:"free_afternoon"},
+"wkend_visit_yinuo": {tx:"你去了咖啡店。店里只有两个客人。沈以诺在吧台后面看书。她看到你，把书扣在桌上。今天想喝什么？",sp:"沈以诺",char:"yinuo_cool",nx:"wkend_yinuo_choice"},
+"wkend_yinuo_choice": {tx:"",ch:[{tx:"你推荐一个",nx:"wkend_yinuo_rec",fx:{yi:2}},{tx:"你刚才在看什么书？",nx:"wkend_yinuo_book",fx:{yi:3}},{tx:"今天生意怎么样？",nx:"wkend_yinuo_biz",fx:{yi:1}}]},
+"wkend_yinuo_rec": {tx:"她看了你一眼，然后转身去拿了一包豆子。瑰夏。有点贵，但你会喜欢的。她开始做咖啡。你喝了一口。确实好喝。多少钱？今天不收你钱。她转身去擦杯子了。你注意到她的手臂内侧有一行很小的纹身。",sp:"沈以诺",char:"yinuo_coffee",sf:"yinuo_tattoo",nx:"free_afternoon"},
+"wkend_yinuo_book": {tx:"她把书翻过来给你看封面。是一本关于咖啡产区的书。了解豆子的来源，才能做出好咖啡。你以前是做什么的？她停顿了一下。……跟咖啡没关系的事。",sp:"沈以诺",char:"yinuo_guard",nx:"free_afternoon"},
+"wkend_yinuo_biz": {tx:"她扫了一眼空荡荡的店面。就这样。你不会觉得……客人太少了吗？咖啡又不是用来拍照的。",sp:"沈以诺",char:"yinuo_cool",nx:"free_afternoon"},
+"wkend_read": {tx:"你从箱子里翻出那本没看完的书，靠在床头看了一个下午。窗外的阳光从西边慢慢转到东边。你看到一半的时候，听到隔壁传来钢琴声。很轻，很慢。你一边看书一边听琴，觉得这个下午过得特别舒服。",sp:"narrator",fx:{gr:3,su:1},np:"np"},
+"free_afternoon": {tx:"下午的时间过得很快。你在想，晚上做什么？",sp:"narrator",np:"np"},
+
+"free_evening": {tx:"傍晚。夕阳正在西沉，把天空染成了橘红色。你想去哪里？",bg:"evening",nx:"free_evening_choice"},
+"free_evening_choice": {tx:"",ch:[{tx:"去天台坐坐",nx:"free_eve_rooftop",fx:{gr:2}},{tx:"去咖啡店",nx:"free_eve_coffee",fx:{yi:2}},{tx:"去楼下散步",nx:"free_eve_walk",fx:{gr:1}},{tx:"去便利店买东西",nx:"free_eve_store",fx:{gr:1}}]},
+"free_eve_rooftop": {tx:"天台上。你坐在折叠椅上，看着夕阳一点一点沉下去。有时候林小鹿在，有时候苏念会经过。有时候只有你一个人。但不管有没有人，天台都是一个好地方。",bg:"sunsetrt",np:"np"},
+"free_eve_coffee": {tx:"你去了咖啡店。沈以诺在做咖啡，店里有几个客人。你在角落找了个位置坐下来。她看到你，微微点了点头。你们没有说话，但你觉得自己被看到了。",bg:"coffee",fx:{yi:1},np:"np"},
+"free_eve_walk": {tx:"你在小区里走了一圈。路灯亮了，树影投在地上。有人在遛狗，有人在乘凉。你走到三楼的时候，听到苏念家的钢琴声从窗户里飘出来。你站在那里听了一会儿，然后继续走。",sp:"narrator",fx:{su:1},np:"np"},
+"free_eve_store": {tx:"你去便利店买了一些日用品。收银台的姐姐已经认识你了。又来了？嗯。你扫码付了钱，拎着袋子往回走。",bg:"store",np:"np"},
+"free_night": {tx:"深夜。你躺在床上，睡不着。窗外有风。蝉鸣声从远处传来，被风吹散了。你想做什么？",bg:"night",nx:"free_night_choice"},
+"free_night_choice": {tx:"",ch:[{tx:"去天台坐坐",nx:"free_night_rooftop",fx:{gr:2}},{tx:"听苏念弹琴",nx:"free_night_piano",fx:{su:2}},{tx:"看书",nx:"free_night_read",fx:{gr:2}},{tx:"睡觉",nx:"free_night_sleep"}]},
+"free_night_rooftop": {tx:"你爬上天台。月光很亮，把一切都照成了银色。风铃在风里轻轻摇晃，发出叮叮当当的声响。你坐在折叠椅上，看着天上的星星。这个夏天的夜晚，总是让人睡不着。",bg:"rooftop",np:"nd"},
+"free_night_piano": {tx:"你靠在墙上，听着隔壁传来的钢琴声。今天的曲子很慢，像是在为什么事情犹豫。你闭上眼睛，想象苏念坐在钢琴前的样子。手指在琴键上轻轻跳动，像是在跟什么人说话。",sp:"narrator",fx:{su:1},np:"nd"},
+"free_night_read": {tx:"你开了台灯，看了一个小时的书。窗外的蝉鸣渐渐安静下来，只剩下风铃的声音。你看到眼皮开始打架，才把书放在枕头旁边，关了灯。",sp:"narrator",fx:{gr:2},np:"nd"},
+"free_night_sleep": {tx:"你翻了个身，闭上眼睛。窗外的风铃声很轻很轻，像有人在耳边低语。你很快就睡着了。",sp:"narrator",np:"nd"},
+"wkday_afternoon": {tx:"下午五点半，下班。外面的阳光还很烈。今天想做什么？",bg:"afternoon",nx:"wkday_afternoon_choice"},
+"wkday_afternoon_choice": {tx:"",ch:[{tx:"去天台坐坐",nx:"wkday_rooftop",fx:{gr:2}},{tx:"去咖啡店",nx:"wkday_coffee_eve",fx:{yi:2}},{tx:"去公园跑步",nx:"wkday_park",fx:{gr:3}},{tx:"直接回家",nx:"wkday_home"}]},
+
+"d8_morning": {tx:"第八天。第二周开始了。你已经习惯了闹钟在六点响起。窗外的蝉鸣比上周更响了，夏天正在加深。",bg:"morning",np:"np"},
+"d8_afternoon": {tx:"下午。你在公司偷偷看了一眼手机。朋友圈里有人在晒海边的照片。你默默关掉手机，继续整理数据。",bg:"afternoon",np:"np"},
+"d8_evening": {tx:"傍晚回到小区。你在楼道里碰到了苏念。她刚下课回来，看起来有点累。今天教了三个小朋友，手有点酸。她甩了甩手腕。",sp:"苏念",char:"sunian",nx:"d8_evening_choice"},
+"d8_evening_choice": {tx:"",ch:[{tx:"要不要我帮你拎东西？",nx:"d8_eve_help",fx:{su:3}},{tx:"教小孩子弹琴很累吧",nx:"d8_eve_tired",fx:{su:2}},{tx:"（点点头）嗯。",nx:"d8_eve_nod"}]},
+"d8_eve_help": {tx:"她看了你一眼，然后笑了。好啊。她把环保袋递给你。里面是几本琴谱和一些蔬菜。你们一起走上五楼。在门口分别的时候，她说：谢谢你。改天请你吃饭。",sp:"苏念",char:"sunian_smile",nx:"d8_night"},
+"d8_eve_tired": {tx:"还好啦。小孩子很可爱的。她的笑容里有一点疲惫。不过有时候……他们会让你弹很难的曲子。她的手指无意识地动了一下。你注意到她的左手好像不太自然。",sp:"苏念",char:"sunian_think",nx:"d8_night"},
+"d8_eve_nod": {tx:"她点点头，回了自己的屋子。你听到门关上的声音，然后是很轻的钢琴声。",sp:"narrator",nx:"d8_night"},
+"d8_night": {tx:"深夜。你躺在床上，听到隔壁传来钢琴声。今天弹的是一首很温柔的曲子，像是在安慰什么人。你闭上眼睛，听着琴声入睡。",bg:"night",fx:{su:1},np:"nd"},
+"d9_morning": {tx:"第九天。你在走廊里碰到了林小鹿。她背着那个帆布包，正要上天台。嘿！早啊！",sp:"林小鹿",char:"xiaolu_happy",np:"np"},
+"d9_evening": {tx:"傍晚。天台上。林小鹿正在给植物浇水。你来了正好！帮我看看这盆薄荷是不是长歪了？",sp:"林小鹿",char:"xiaolu_happy",nx:"d9_evening_choice"},
+"d9_evening_choice": {tx:"",ch:[{tx:"好像确实有点歪",nx:"d9_eve_tilt",fx:{xi:2}},{tx:"长得很健康啊",nx:"d9_eve_healthy",fx:{xi:3}},{tx:"你真的很用心照顾它们",nx:"d9_eve_care",fx:{xi:2,gd:1}}]},
+"d9_eve_tilt": {tx:"对吧！她蹲下来，小心翼翼地用手指把薄荷的茎扶正。要这样，让它朝着阳光的方向长。她一边弄一边念叨。你看，植物也需要引导的。",sp:"林小鹿",char:"xiaolu_plant",nx:"d9_night"},
+"d9_eve_healthy": {tx:"真的吗？她蹲下来仔细看了看，然后露出开心的笑容。太好了！我每天都担心它们。她站起来，拍拍裙子上的土。谢谢你安慰我。",sp:"林小鹿",char:"xiaolu_happy",nx:"d9_night"},
+"d9_eve_care": {tx:"她愣了一下。然后低下头，声音变轻了。……因为这是我外婆留下的东西。我不照顾它们，就没人照顾了。她很快抬起头，又恢复了元气满满的样子。走！去看看那边的向日葵！",sp:"林小鹿",char:"xiaolu",nx:"d9_night"},
+"d9_night": {tx:"深夜。你没有听到钢琴声。安静得有点不习惯。你翻了个身，看着窗外的月亮。也许苏念今晚没有弹琴。也许她弹了，但你没有听到。",bg:"night",np:"nd"},
+"d10_evening": {tx:"傍晚。你去了咖啡店。沈以诺在擦杯子。她看到你，指了指吧台。坐。今天有新的豆子。",sp:"沈以诺",char:"yinuo_cool",nx:"d10_evening_choice"},
+"d10_evening_choice": {tx:"",ch:[{tx:"什么豆子？",nx:"d10_eve_bean",fx:{yi:2}},{tx:"你每天都在这里吗？",nx:"d10_eve_daily",fx:{yi:1}},{tx:"（安静地坐下来）",nx:"d10_eve_sit",fx:{yi:2}}]},
+"d10_eve_bean": {tx:"肯尼亚。AA级。她开始做咖啡。你注意到她的动作比第一次更熟练了。好喝吗？你喝了一口。好喝。她转身去忙别的了。你注意到她转身的时候，嘴角好像动了一下。",sp:"沈以诺",char:"yinuo_coffee",nx:"d10_night"},
+"d10_eve_daily": {tx:"她看了你一眼。差不多。你不累吗？习惯了。她的语气很平淡。你开这家店多久了？两年。她没有再说什么。你知道有些问题不该追问。",sp:"沈以诺",char:"yinuo_guard",nx:"d10_night"},
+"d10_eve_sit": {tx:"你安静地坐下来。她开始做咖啡。全程没有说话。你喝了一口。很好喝。她点点头，转身去忙别的了。你们之间的沉默，变得越来越自然。",sp:"narrator",char:"yinuo_coffee",nx:"d10_night"},
+"d10_night": {tx:"深夜。你回到房间。隔壁传来钢琴声。今天弹的是一首你没听过的曲子，很慢，很温柔。你闭上眼睛，听着琴声入睡。",bg:"night",fx:{su:1},np:"nd"},
+"d11_night": {tx:"深夜。你在天台上坐了很久。月光很亮，风铃在风里轻轻摇晃。你忽然觉得，这个天台已经成了你的秘密基地。",bg:"rooftop",fx:{gr:2},np:"nd"},
+"d12_evening": {tx:"傍晚。你在走廊里碰到了苏念。她手里拿着一袋葡萄。又买多了。你要吗？",sp:"苏念",char:"sunian_smile",nx:"d12_evening_choice"},
+"d12_evening_choice": {tx:"",ch:[{tx:"好啊",nx:"d12_eve_yes",fx:{su:2}},{tx:"你总是买多吗？",nx:"d12_eve_tease",fx:{su:3}},{tx:"不了，谢谢",nx:"d12_eve_no"}]},
+"d12_eve_yes": {tx:"她笑了笑，把葡萄递给你。洗了再吃。她转身回了501。你回到房间，把葡萄洗了。很甜。",sp:"narrator",nx:"d12_night"},
+"d12_eve_tease": {tx:"她愣了一下，然后笑了出来。习惯了。我妈说我从小就这样。她把葡萄往你手里一塞。不许还回来！她转身就走了。你看着手里的葡萄，忍不住笑了。",sp:"苏念",char:"sunian_smile",nx:"d12_night"},
+"d12_eve_no": {tx:"好吧。她没有坚持，回了自己的屋子。你回到房间，忽然有点后悔。",sp:"narrator",nx:"d12_night"},
+"d12_night": {tx:"深夜。你躺在床上，听到隔壁传来钢琴声。今天弹的是一首很快的曲子。指法很流畅，像是从指尖自然流出来的。但中间有一个地方，忽然停了一下。好像弹错了。然后又继续了。你闭上眼睛，想象苏念坐在钢琴前的样子。",bg:"night",fx:{su:1},np:"nd"},
+"d13_morning": {tx:"第十三天。你在天台上发现了一盆新的植物。是一盆小番茄，上面还挂着几颗青涩的果实。你不知道是谁放的。",bg:"rooftop",fx:{gd:1},np:"np"},
+"d13_night": {tx:"深夜。你在天台上坐了很久。风铃在风里叮叮当当地响。你忽然觉得，这个夏天过得好快。已经快两周了。",bg:"rooftop",fx:{gr:2},np:"nd"},
+"d14_morning": {tx:"第十四天。第二周的最后一天。你在天台上看到了林小鹿。她正蹲在角落里，看着那盆新出现的小番茄发呆。你知道是谁放的吗？",sp:"林小鹿",char:"xiaolu_confused",nx:"d14_morning_choice"},
+"d14_morning_choice": {tx:"",ch:[{tx:"不知道",nx:"d14_m_dk",fx:{xi:1}},{tx:"也许是苏念？",nx:"d14_m_sunian",fx:{xi:1}},{tx:"也许是某个路过的人",nx:"d14_m_someone"}]},
+"d14_m_dk": {tx:"她歪着头想了一会儿。奇怪。昨天还没有的。她蹲下来，小心翼翼地给小番茄浇了点水。不管是谁放的，我会好好照顾它的。",sp:"林小鹿",char:"xiaolu_plant",nx:"d14_afternoon"},
+"d14_m_sunian": {tx:"苏念？她想了想。不会吧。她很少来天台的。不过……也许吧。她蹲下来，给小番茄浇了点水。不管是谁，谢谢它。",sp:"林小鹿",char:"xiaolu",nx:"d14_afternoon"},
+"d14_m_someone": {tx:"路过的人？她笑了。五楼的天台，谁会路过啊？不过也是，这个小区什么人都有。她蹲下来，给小番茄浇了点水。",sp:"林小鹿",char:"xiaolu_happy",nx:"d14_afternoon"},
+"d14_afternoon": {tx:"下午。你在公司的时候，忽然想到：也许那盆小番茄是林小鹿放的，但她不想承认。也许是为了给天台增加一点生机。你决定不去追问。有些事情，不需要知道答案。",bg:"afternoon",np:"np"},
+"d14_night": {tx:"深夜。第二周结束了。你躺在床上，听着窗外的蝉鸣。这个夏天已经过去了两周。你认识了三个女孩，开始了一份新工作，找到了一个属于自己的天台。这个夏天，好像才刚刚开始。",bg:"night",sf:"week2_done",np:"nd"},
+
+"d15_morning": {tx:"第十五天。第三周开始了。你出门的时候，天台上多了一盆新的薄荷。是林小鹿种的吗？",bg:"morning",fx:{gd:1},np:"np"},
+"d15_evening": {tx:"傍晚。你在天台上碰到了苏念。她很少来天台的。今天怎么上来了？",sp:"narrator",char:"sunian",nx:"d15_evening_2"},
+"d15_evening_2": {tx:"她站在天台边上，看着远处的城市。夕阳把她的侧脸染成了金色。偶尔会上来坐坐。她的声音很轻。这里很安静。",sp:"苏念",char:"sunian",nx:"d15_evening_choice"},
+"d15_evening_choice": {tx:"",ch:[{tx:"你看起来有心事",nx:"d15_eve_worry",fx:{su:3}},{tx:"天台确实是个好地方",nx:"d15_eve_good",fx:{su:2}},{tx:"（安静地站在旁边）",nx:"d15_eve_quiet",fx:{su:2}}]},
+"d15_eve_worry": {tx:"她看了你一眼，然后笑了。有那么明显吗？她低下头，看着自己的手。有时候我会想，我现在做的事情，到底有没有意义。教小孩子弹琴……她停顿了一下。算了，不说这个了。",sp:"苏念",char:"sunian_think",nx:"d15_night"},
+"d15_eve_good": {tx:"嗯。她微微点头。比房间好。至少有风。你们安静地站了一会儿，看着夕阳一点一点沉下去。谢谢你。她忽然说。谢什么？谢谢你……没有问太多。",sp:"苏念",char:"sunian",nx:"d15_night"},
+"d15_eve_quiet": {tx:"你们安静地站了很久。夕阳一点一点沉下去，天空从橘色变成了紫色。过了一会儿，她开口了。你知道吗，有时候安静地跟一个人待在一起，比说很多话更舒服。",sp:"苏念",char:"sunian",nx:"d15_night"},
+"d15_night": {tx:"深夜。你躺在床上，听到隔壁传来钢琴声。今天弹的是一首很慢的曲子。每一个音符都像是从水里捞出来的，湿漉漉的，带着回响。你不知道这首曲子叫什么名字。但你觉得，它听起来像是一个人在深夜里自言自语。",bg:"night",fx:{su:1},np:"nd"},
+"d16_evening": {tx:"傍晚。天台上。林小鹿正在给植物浇水。她看到你来了，招招手。嘿！你来得正好！",sp:"林小鹿",char:"xiaolu_happy",nx:"d16_evening_2"},
+"d16_evening_2": {tx:"她拉着你蹲到角落里，指着一盆植物。你看！向日葵发芽了！真的发芽了！她兴奋得手舞足蹈。我种了两周了！终于发芽了！",sp:"林小鹿",char:"xiaolu_happy",fx:{gd:1},nx:"d16_evening_choice"},
+"d16_evening_choice": {tx:"",ch:[{tx:"太好了！",nx:"d16_eve_great",fx:{xi:3}},{tx:"你很有耐心",nx:"d16_eve_patient",fx:{xi:2}},{tx:"它会长得很高吧",nx:"d16_eve_tall",fx:{xi:2}}]},
+"d16_eve_great": {tx:"对吧！对吧！她蹲下来，小心翼翼地用手指碰了碰那棵嫩芽。你看它多小啊。但是以后会变成很大的向日葵。她的表情变得柔软。就像人一样。小时候小小的，长大了就不一样了。",sp:"林小鹿",char:"xiaolu",nx:"d16_night"},
+"d16_eve_patient": {tx:"她愣了一下。耐心？她想了想。可能吧。我以前做什么事情都三分钟热度。但是照顾这些花……不知道为什么，就是想一直照顾下去。也许是因为……她没有说完。",sp:"林小鹿",char:"xiaolu_think",nx:"d16_night"},
+"d16_eve_tall": {tx:"嗯！向日葵可以长到两米高！她比划了一下。到时候它会开出很大的花，朝着太阳转。她的语气里有一种向往。我也想变成那样。朝着有光的地方生长。",sp:"林小鹿",char:"xiaolu",nx:"d16_night"},
+"d16_night": {tx:"深夜。你在天台上坐了很久。月光很亮，风铃在风里轻轻摇晃。你忽然想到林小鹿说的话——朝着有光的地方生长。你觉得自己也应该这样。",bg:"rooftop",fx:{gr:2},np:"nd"},
+"d17_night": {tx:"深夜。你被一阵钢琴声吵醒了。不是苏念平时弹的那种温柔的曲子。这一次，声音更激烈、更复杂。像是在挣扎。弹到一半的时候，忽然停了。然后是一声很轻的、压抑的叹息。",bg:"night",char:"sunian_piano",fx:{su:2},np:"nd"},
+"d18_evening": {tx:"傍晚。你在咖啡店坐了一个小时。沈以诺今天话比平时多了一点。你知道吗，她忽然说，咖啡豆是有生命的。从树上摘下来，经过处理、烘焙、研磨，最后变成一杯咖啡。她看着杯子里的咖啡。每一杯咖啡，都是一颗豆子的一生。",sp:"沈以诺",char:"yinuo_coffee",fx:{yi:3},np:"np"},
+"d19_night": {tx:"深夜。你在天台上碰到了林小鹿。她蹲在角落里，面前放着那几盆植物。月光照在她身上。她好像在发呆。你走过去，在她旁边坐下来。她看了你一眼，没有说话。你们就这样安静地坐了很久。",bg:"rooftop",char:"xiaolu",fx:{xi:3},np:"nd"},
+"d20_evening": {tx:"傍晚。你在走廊里碰到了苏念。她刚下课回来，看起来有点累。你注意到她的左手好像在微微发抖。你还好吗？她看了你一眼，然后把手藏到身后。没事。只是有点累。",sp:"苏念",char:"sunian",nx:"d20_evening_choice"},
+"d20_evening_choice": {tx:"",ch:[{tx:"你的手怎么了？",nx:"d20_eve_hand",fx:{su:2}},{tx:"要不要休息一下？",nx:"d20_eve_rest",fx:{su:3}},{tx:"（假装没看到）",nx:"d20_eve_pretend"}]},
+"d20_eve_hand": {tx:"她愣了一下，然后笑了。没什么。只是……弹琴弹多了。她把手从身后拿出来，甩了甩。你看到她的左手无名指上有一个旧茧。有时候会这样。习惯了。",sp:"苏念",char:"sunian",nx:"d20_night"},
+"d20_eve_rest": {tx:"她看了你一眼，表情变得柔和。谢谢你。我没事的。她微微一笑。改天……改天我请你吃饭。就当谢谢你这段时间的关心。她转身回了501。门关上的时候，你听到她轻轻叹了口气。",sp:"苏念",char:"sunian_smile",nx:"d20_night"},
+"d20_eve_pretend": {tx:"你假装没看到，跟她聊了几句别的。她似乎松了口气。你们在走廊里站了一会儿，然后各自回了房间。你关上门的时候，听到隔壁传来很轻的钢琴声。",sp:"narrator",nx:"d20_night"},
+"d20_night": {tx:"深夜。你躺在床上，想着苏念的手。她弹琴弹多了？还是……有什么别的原因？你没有追问。有些事情，她想说的时候自然会说。",bg:"night",np:"nd"},
+"d21_morning": {tx:"第二十一天。天空灰蒙蒙的，空气里有一种潮湿的味道。天气预报说今天有暴雨。你出门的时候带了伞。",bg:"morning",np:"np"},
+"d21_afternoon": {tx:"下午。暴雨真的来了。大雨倾盆而下，把整个城市都淹没了。你从公司窗户往外看，马路变成了河流。五点半的时候，雨还没有停。你决定等一等再走。",bg:"rain",np:"np"},
+"d21_evening": {tx:"傍晚六点半。雨终于小了一点。你撑着伞往家走。走到小区门口的时候，你看到一个人蹲在楼道口——是林小鹿。她没有伞，浑身湿透了。",bg:"rain",char:"xiaolu_sad",nx:"d21_evening_2"},
+"d21_evening_2": {tx:"你怎么在这里？她抬起头，脸上不知道是雨水还是泪水。我……我忘带伞了。她的声音有点发抖。你蹲下来，把伞递给她。先上去吧。会感冒的。",sp:"narrator",char:"xiaolu_sad",nx:"d21_evening_choice"},
+"d21_evening_choice": {tx:"",ch:[{tx:"（把伞给她）走，我送你上去",nx:"d21_eve_umbrella",fx:{xi:5}},{tx:"你没事吧？",nx:"d21_eve_ok",fx:{xi:3}},{tx:"（脱下外套给她披上）",nx:"d21_eve_coat",fx:{xi:5}}]},
+"d21_eve_umbrella": {tx:"她看了你一眼，然后接过伞。你们一起走进楼道。她的肩膀在微微发抖。走到五楼的时候，她说：谢谢你。她的声音很轻。然后她上了天台。你没有跟上去。有些时候，一个人需要独处。",sp:"林小鹿",char:"xiaolu",nx:"d21_night"},
+"d21_eve_ok": {tx:"她点点头，但你看到她的眼圈红了。没事。就是……雨太大了。她站起来，用袖子擦了擦脸。我先上去了。她转身往楼上走。你看着她的背影消失在楼梯拐角。",sp:"narrator",char:"xiaolu_sad",nx:"d21_night"},
+"d21_eve_coat": {tx:"她愣了一下，然后接过你的外套。谢谢。她的声音很轻。你们一起走进楼道。走到五楼的时候，她把外套还给你。改天洗了还你。她上了天台。你看着她消失在楼梯口。",sp:"林小鹿",char:"xiaolu",nx:"d21_night"},
+"d21_night": {tx:"深夜。暴雨停了。窗外的空气清新了很多。你躺在床上，听着水滴从屋檐滴落的声音。今天是第三周的最后一天。你忽然意识到，你已经开始在意她们了。苏念、林小鹿、沈以诺。三个女孩，三种不同的温度。",bg:"night",sf:"week3_done",np:"nd"},
+"d22_night": {tx:"深夜。你在天台上坐了很久。月光很亮，风铃在风里轻轻摇晃。你忽然听到楼下传来钢琴声。不是苏念平时弹的那种温柔的曲子。这一次，声音更激烈、更复杂。像是在挣扎。弹到一半的时候，忽然停了。然后是一声很轻的、压抑的叹息。你站起来，走到天台边上，往下看。苏念家的窗户亮着灯。窗帘没有拉严，你隐约看到她坐在钢琴前，双手捂着脸。",bg:"rooftop",char:"sunian_sad",fx:{su:3},np:"nd"},
+"d23_evening": {tx:"傍晚。你在天台上碰到了林小鹿。她蹲在角落里，面前放着一条旧围裙。你认出来了——那是她外婆的。她没有哭，但眼睛红红的。你走过去，在她旁边坐下来。她看了你一眼，然后说：今天是我外婆的生日。",sp:"林小鹿",char:"xiaolu_sad",nx:"d23_evening_choice"},
+"d23_evening_choice": {tx:"",ch:[{tx:"她一定是个很好的人",nx:"d23_eve_good",fx:{xi:4}},{tx:"（安静地陪着她）",nx:"d23_eve_sit",fx:{xi:3}},{tx:"你想聊聊她吗？",nx:"d23_eve_talk",fx:{xi:5}}]},
+"d23_eve_good": {tx:"她点点头，笑了。是的。她是最好的人。她低头看着那条围裙。她会做很好吃的桂花糕。每次我来，她都会做给我吃。她的声音变轻了。现在没人做了。",sp:"林小鹿",char:"xiaolu",nx:"d23_night"},
+"d23_eve_sit": {tx:"你们安静地坐了很久。她没有说话，你也没有。最后她站起来，拍了拍裙子。谢谢你。她的声音很轻。谢谢你没有问太多。",sp:"林小鹿",char:"xiaolu",nx:"d23_night"},
+"d23_eve_talk": {tx:"她看了你一眼，然后点点头。好。她开始讲她外婆的故事。讲她小时候在天台上玩，讲外婆教她种花，讲外婆做的桂花糕。讲着讲着，她笑了。但眼泪也流了下来。你没有打断她。有些故事，需要被说出来。",sp:"林小鹿",char:"xiaolu_sad",nx:"d23_night"},
+"d23_night": {tx:"深夜。你回到房间，躺在床上。隔壁传来钢琴声。今天弹的是一首很慢的曲子，像是在为什么事情犹豫。你闭上眼睛，想着林小鹿的外婆，想着苏念的手，想着沈以诺的纹身。每个人都有自己的秘密。",bg:"night",np:"nd"},
+"d24_evening": {tx:"傍晚。你去了咖啡店。今天店里没有客人。沈以诺坐在吧台后面，看着窗外发呆。你走进去的时候，她没有抬头。你坐下来，安静地等了一会儿。然后她开口了。今天休息。不开门。",sp:"沈以诺",char:"yinuo_tired",nx:"d24_evening_choice"},
+"d24_evening_choice": {tx:"",ch:[{tx:"你还好吗？",nx:"d24_eve_ok",fx:{yi:2}},{tx:"那我陪你坐一会儿",nx:"d24_eve_sit",fx:{yi:4}},{tx:"（转身要走）",nx:"d24_eve_leave"}]},
+"d24_eve_ok": {tx:"她看了你一眼。没事。只是……有点累。她站起来，走到窗边。你知道吗，有时候我会想，我做这个决定到底对不对。辞职开咖啡店。所有人都说我疯了。她的声音很平淡。但我不后悔。",sp:"沈以诺",char:"yinuo_guard",nx:"d24_night"},
+"d24_eve_sit": {tx:"她看了你一眼，然后点点头。好。你坐在吧台前，她坐在吧台后面。你们没有说话。窗外的阳光一点一点变暗。过了很久，她开口了。谢谢你。她的声音很轻。谢谢你没有问为什么。",sp:"沈以诺",char:"yinuo",nx:"d24_night"},
+"d24_eve_leave": {tx:"你转身要走。等等。她叫住你。你回头。她犹豫了一下。……改天来喝咖啡。她转身继续看窗外。你走出咖啡店，心里有一种说不出的感觉。",sp:"沈以诺",char:"yinuo",nx:"d24_night"},
+"d24_night": {tx:"深夜。你躺在床上，想着沈以诺的话。辞职开咖啡店。所有人都说她疯了。但你不觉得她疯了。你觉得她很勇敢。",bg:"night",np:"nd"},
+"d25_night": {tx:"深夜。第四周快结束了。你在天台上坐了很久。风铃在风里叮叮当当地响。你忽然意识到，你已经开始在意她们了。苏念、林小鹿、沈以诺。三个女孩，三种不同的温度。你必须做出选择。",bg:"rooftop",sf:"week4_choice",np:"nd"},
+"d28_night": {tx:"深夜。第四周结束了。你躺在床上，听着窗外的蝉鸣。这个夏天已经过去了四周。还有三周。你知道，接下来的三周，会决定一切。",bg:"night",sf:"week4_done",np:"nd"},
+
+"d29_morning": {tx:"第二十九天。第五周开始了。你知道自己最在意谁了。每天早上醒来，第一个想到的人，就是答案。",bg:"morning",np:"np"},
+"d31_evening": {tx:"傍晚。天台上。你和她坐在折叠椅上，看着夕阳。今天的晚霞特别好看，整片天空都是橘红色的。你知道吗？她忽然说。我很久没有这样跟人一起看夕阳了。",bg:"sunsetrt",np:"np"},
+"d32_night": {tx:"深夜。你在天台上坐了很久。月光很亮。你忽然想到一个问题：你来这里，是为了什么？是为了工作？是为了逃离？还是为了……遇见什么人？你没有答案。但你知道，这个夏天，跟以前的夏天都不一样。",bg:"rooftop",fx:{gr:3},np:"nd"},
+"d35_morning": {tx:"第三十五天。你醒来的时候，忽然意识到一件事——你可能喜欢上某个人了。这个念头像闪电一样击中了你。你躺在床上，盯着天花板，心跳得很快。是的。你喜欢她。",bg:"morning",fx:{gr:3},np:"np"},
+"d35_night": {tx:"深夜。你躺在床上，睡不着。你喜欢她。这个念头一直在你脑子里转。你想了很久，最后决定：顺其自然。",bg:"night",np:"nd"},
+"d36_morning": {tx:"第三十六天。第六周开始了。你出门的时候，碰到她正在走廊里。她看了你一眼，然后低下头。早上好。她的声音很轻。你注意到她的耳朵红了。",bg:"morning",np:"np"},
+"d38_evening": {tx:"傍晚。你在天台上等她。她来了。你们坐在折叠椅上，看着夕阳。今天的晚霞特别好看。你知道吗？她忽然说。我以前一直觉得，这个天台很孤独。现在有你来，好像不那么孤独了。",bg:"sunsetrt",np:"np"},
+"d39_night": {tx:"深夜。你听到隔壁传来钢琴声。今天弹的是一首很温柔的曲子。你闭上眼睛，听着琴声。忽然，琴声停了。然后是很轻的敲门声。你打开门。她站在门口，穿着睡衣，头发有点乱。我……睡不着。",bg:"night",np:"nd"},
+"d40_evening": {tx:"傍晚。你在咖啡店坐了一个小时。沈以诺今天话比平时多了一点。你知道吗，她忽然说，你是来这里最频繁的客人。她看着你，嘴角微微上扬。谢谢你。",sp:"沈以诺",char:"yinuo_warm",fx:{yi:3},np:"np"},
+"d41_night": {tx:"深夜。你在天台上坐了很久。明天是第四十二天。你知道，这一天会发生什么。月光很亮，风铃在风里轻轻摇晃。你深吸一口气。不管发生什么，你都准备好了。",bg:"rooftop",np:"nd"},
+"d42_evening": {tx:"第四十二天。傍晚。天台上。月圆夜。月光很亮，把一切都照成了银色。你坐在折叠椅上，等着。她来了。她穿着一件白色的裙子，头发披散着，在月光下看起来像一个影子。她走到你旁边，坐下来。你们没有说话。月光、风铃、蝉鸣。还有两个人的呼吸声。",bg:"rooftop",np:"nd"},
+"d42_night": {tx:"你们在天台上坐了很久。月光从东边慢慢转到西边。她忽然开口了。你知道吗……她的声音很轻。我以前一直觉得，我不需要任何人。我一个人可以过得很好。她停顿了一下。但是……遇见你之后，我觉得……也许……她没有说完。你看着她。月光照在她的脸上，你看到她的眼圈红了。也许什么？你轻声问。她低下头。也许……我不需要一个人扛。",bg:"rooftop",np:"nd"},
+"d43_morning": {tx:"第四十三天。第七周开始了。最后一周。你醒来的时候，阳光从窗帘缝里钻进来，在地上画了一条亮线。窗外的蝉鸣比任何时候都响亮。最后一周了。你知道，这一周，会决定一切。",bg:"morning",np:"np"},
+"d45_evening": {tx:"傍晚。你在天台上等她。她来了。你们坐在折叠椅上，看着夕阳。最后一周了。她忽然说。嗯。你点点头。你们没有再说什么。但你们都知道，有些话，快要说了。",bg:"sunsetrt",np:"np"},
+"d47_night": {tx:"深夜。你躺在床上，睡不着。明天是第四十八天。后天是第四十九天。最后一天。你想了很久，最后决定：不管结果如何，你都要说出来。",bg:"night",np:"nd"},
+"d48_evening": {tx:"第四十八天。傍晚。天台上。你在等她。她来了。你看着她，心跳得很快。你知道，这是倒数第二天。有些话，必须说了。",bg:"sunsetrt",np:"np"},
+"d48_night": {tx:"深夜。你站在天台上，看着远处的城市灯火。明天是最后一天。你深吸一口气。不管明天发生什么，你都不会后悔这个夏天。",bg:"rooftop",np:"nd"},
+"d49_morning": {tx:"第四十九天。最后一天。你醒来的时候，阳光从窗帘缝里钻进来，在地上画了一条亮线。窗外的蝉鸣比任何时候都响亮。今天是最后一天了。你起床，洗漱，穿好衣服。你走到窗边，看着天台上的风铃。风铃在风里叮叮当当地响。你深吸一口气。准备好了。",bg:"morning",nx:"d49_choice"},
+"d49_choice": {tx:"",ch:[{tx:"下楼，去见她",nx:"d49_go",fx:{gr:3}},{tx:"不下楼",nx:"d49_stay"}]},
+"d49_go": {tx:"你推开502的门，走下楼梯。每一步都很沉重，但也很坚定。你走到楼下，阳光刺得你眯了一下眼。你深吸一口气。该说的话，今天一定要说。",bg:"morning",nx:"calc_ending"},
+"d49_stay": {tx:"你没有下楼。你躺在床上，听着窗外的蝉鸣。这个夏天，你学会了一件事：有些人注定只是风景。你闭上眼睛。风铃在窗外叮叮当当地响。",bg:"night",ed:"end_lonely"},
+"calc_ending": {tx:"你站在小区门口，看着来来往往的行人。最后一周了。你知道自己要去哪里，也知道要说什么话。深吸一口气，你迈出了脚步。",sp:"narrator",np:"np"},
+"end_sun_perfect": {tx:"完美结局「左手边的旋律」\n\n你敲了敲501的门。苏念站在门口，穿着白色棉麻裙。你来了。她说。\n\n她走到钢琴前坐下来。你知道吗，我很久没有给任何人弹过一首完整的曲子了。但今天，我想弹给你听。\n\n她深吸一口气，开始弹。每一个音符都像是从心里流出来的，带着颤抖，带着勇气。她的左手在微微发抖。但她没有停。\n\n弹到最后一个音符，她的手停在琴键上。她转过头来，眼圈红了，但笑容是真的。弹完了。她的声音很轻。我弹完了。\n\n你握住她的手。她的手在你手心里微微发抖。但你知道，这一次，她不会再停下来了。\n\n——苏念·完美结局·完——",sp:"ending",bg:"endgood",char:"sunian_piano"},
+"end_sun_good": {tx:"好结局「夏日终曲」\n\n你们在一起了。夏天的最后一天，你在天台上对她说：我喜欢你。她愣了很久，然后笑了。我知道。从你第一次帮我搬箱子的时候就知道了。\n\n她低下头，耳朵红了。我也喜欢你。她说完就转身跑了。\n\n从那以后，你每天傍晚都会去天台。她还在教琴，但你成了她唯一的观众。每天晚上，她会弹一首曲子给你听。有时候是完整的，有时候弹到一半就停下来。但不管弹了多少，你都会听完。\n\n——苏念·好结局·完——",sp:"ending",bg:"endgood",char:"sunian_smile"},
+"end_sun_normal": {tx:"普通结局「未完成的曲子」\n\n夏天结束了。你没有对她说出那句话。她也没有。你们还是邻居，还是会打招呼。但有些话，始终没有说出口。\n\n秋天来了。天台上的风铃换了一串新的。你每天晚上还是能听到钢琴声。有时候是完整的曲子，有时候弹到一半就停下来。\n\n也许明年夏天，你会说出那句话。也许不会。但你知道，这个夏天，你们之间有过什么。就像那首未完成的曲子——虽然没有弹完，但每一个音符都是真的。\n\n——苏念·普通结局·完——",sp:"ending",bg:"endgood",char:"sunian"},
+"end_sun_friend": {tx:"友情结局「好邻居」\n\n夏天结束了。你们还是邻居。有一天，你在走廊里碰到她。她手里拎着一袋葡萄。又买多了。你要吗？\n\n你接过葡萄。谢谢。她笑了笑。有你这个邻居真好。\n\n你听懂了这句话的意思。邻居。不是别的什么，只是邻居。你点点头。嗯，有你这个邻居也很好。\n\n她转身回了501。门关上的时候，你听到她轻轻叹了口气。窗外的风铃在风里叮叮当当地响。秋天快到了。\n\n——苏念·友情结局·完——",sp:"ending",bg:"endgood",char:"sunian"},
+"end_sun_bad1": {tx:"坏结局「琴弦断」\n\n那天傍晚，你在天台上碰到了苏念。她正在发呆。你走过去，说：我想听你弹那首比赛曲。\n\n她的脸色瞬间变了。然后她转身走了。没有说话，没有解释。她回了501，关上了门。\n\n那天晚上，你没有听到钢琴声。第二天，她搬走了。你没有来得及说再见。\n\n——苏念·坏结局·完——",sp:"ending",bg:"endbad",char:"sunian_sad"},
+"end_sun_bad2": {tx:"坏结局「沉默的走廊」\n\n夏天结束了。你的分数太低了。她开始疏远你。你在走廊里碰到她，她会点点头，然后快步走过。你敲501的门，没有人开。\n\n有一天，你看到搬家公司的人在搬钢琴。你问他们：这家人要搬走了吗？他们点点头。\n\n你站在走廊里，看着钢琴被抬下楼。窗外的风铃还在响。但弹琴的人已经不在了。\n\n——苏念·坏结局·完——",sp:"ending",bg:"endbad",char:"sunian_sad"},
+"end_xia_perfect": {tx:"完美结局「天台上的方向」\n\n林小鹿蹲在角落里，正在给向日葵浇水。那棵向日葵已经长到一米多高了。嘿！你来了！\n\n你知道吗，她忽然说。我决定了。我要回去上学了。\n\n她看着你，笑得眼睛弯弯的。我外婆一定不希望我这样一直迷路下去。所以我决定回去。不是因为别人让我回去，是因为我自己想回去了。\n\n她从帆布包里拿出一个花盆，上面写着：谢谢你陪我迷路。这是给你的。等它开花的时候，我就回来了。\n\n谢谢你。谢谢你没有让我回去上学。谢谢你只是陪我。\n\n她转身走了。风铃在身后叮叮当当地响。你知道，她会回来的。\n\n——林小鹿·完美结局·完——",sp:"ending",bg:"endgood",char:"xiaolu_happy"},
+"end_xia_good": {tx:"好结局「小鹿回来了」\n\n她去了一所新学校。每个月都会回来打理花园。有一天，她站在天台上，看着远处的城市。\n\n你知道吗，我好像知道我是谁了。我是那个喜欢种花的人。不管以后做什么工作，不管去哪里，我都会种花。\n\n谢谢你陪我找到了方向。等向日葵开花的时候，我带你去看。到时候，我请你吃饭。\n\n她转身走了。风铃在身后叮叮当当地响。你知道，她会回来的。因为她已经找到了方向。\n\n——林小鹿·好结局·完——",sp:"ending",bg:"endgood",char:"xiaolu_happy"},
+"end_xia_normal": {tx:"普通结局「夏天的风」\n\n夏天结束了。她回学校了。你们保持着联系，但距离让一切变得模糊。\n\n你每天还是会去天台浇花。向日葵开花了，很大一朵，朝着太阳的方向。你拍了一张照片发给她。她回了一个表情包。\n\n也许明年夏天，你会说出那句话。也许不会。但你知道，这个夏天的风，会一直吹。\n\n——林小鹿·普通结局·完——",sp:"ending",bg:"endgood",char:"xiaolu"},
+"end_xia_friend": {tx:"友情结局「笔友」\n\n她回学校了。你们每周写一封信。她在信里讲学校的事情，讲新的朋友，讲种的花。你在信里讲工作的事情，讲天台的花，讲那只橘猫。\n\n有一天，她在信里写道：你知道吗，我终于知道我想做什么了。我想学园艺。我想让更多的天台变成花园。\n\n谢谢你。谢谢你陪我迷路。你看着信，笑了。窗外的风铃在风里叮叮当当地响。\n\n——林小鹿·友情结局·完——",sp:"ending",bg:"endgood",char:"xiaolu"},
+"end_xia_bad1": {tx:"坏结局「逃离」\n\n那天你在天台上跟她说：你应该回去上学。\n\n她的脸色瞬间变了。什么意思？你暑假在这里耗着也不是办法。回去上学，找个工作，才是正经事。\n\n她看着你，眼神里有一种你从未见过的东西。然后她站起来。好。我明天就走。\n\n第二天，她真的走了。天台上只剩下那些植物，没人浇水，慢慢枯死了。你不知道她去了哪里。你给她发消息，她没有回。\n\n你知道，她不会再回来了。因为你说了那句话。\n\n——林小鹿·坏结局·完——",sp:"ending",bg:"endbad",char:"xiaolu_sad"},
+"end_xia_bad2": {tx:"坏结局「迷路的小鹿」\n\n夏天结束了。你的分数太低了。她开始疏远你。你去天台，她不在。\n\n有一天，你在天台上发现了一张纸条。花园交给你了。\n\n你拿着纸条，站在天台上。风铃在风里叮叮当当地响。你知道，她走了。\n\n你蹲下来，看着那些植物。它们需要人照顾。你拿起矿泉水瓶，开始浇水。也许有一天，她会回来。也许不会。但你知道，这些花，你会一直照顾下去。\n\n——林小鹿·坏结局·完——",sp:"ending",bg:"endbad",char:"xiaolu_sad"},
+"end_yin_perfect": {tx:"完美结局「Still here」\n\n你推开咖啡店的门。沈以诺站在吧台后面，手臂内侧的纹身若隐若现。你来了。嗯。\n\n她开始做咖啡。动作跟往常一样精确。做好了，她把咖啡放在你面前。你喝了一口。很好喝。\n\n她看着你，沉默了一会儿。然后她卷起袖子，露出手臂内侧的纹身。那是一行很小的字：Still here。\n\n这是手术后纹的。你知道手术？嗯。你知道……甲状腺癌？你点点头。\n\n她沉默了很久。然后她笑了。不是那种酷酷的笑，是真正的、放松的笑。Still here，她说。现在这句话有了新的意思。\n\n谢谢你。谢谢你没有用那种眼神看我。你握住她的手。她的手在你手心里很温暖。\n\n窗外的阳光照进来，照在她的纹身上。Still here。是的。她还在。你也还在。\n\n——沈以诺·完美结局·完——",sp:"ending",bg:"endgood",char:"yinuo_warm"},
+"end_yin_good": {tx:"好结局「第八个座位」\n\n你们在一起了。咖啡店还是亏钱，但她给你留了一个永远的位置。第八个座位。\n\n你每天下班后都会去坐一会儿。她给你做咖啡，你看着她做。有一天，你问她：你后悔辞职吗？\n\n她想了很久。不后悔。因为如果我不辞职，就不会遇见你。她看着你，嘴角微微上扬。你是这家店最好的客人。\n\n你笑了。不是客人。是合伙人。她愣了一下，然后笑了出来。好。合伙人。\n\n窗外的阳光照进来，照在她的纹身上。Still here。是的。她还在。你也还在。\n\n——沈以诺·好结局·完——",sp:"ending",bg:"endgood",char:"yinuo_warm"},
+"end_yin_normal": {tx:"普通结局「常客」\n\n夏天结束了。你没有说出那句话。你们还是每天见面，她给你做咖啡，你看着她做。但有些话，始终没有说出口。\n\n秋天来了。咖啡店还是那么小，还是只有八个座位。你还是每天去坐一会儿。有一天，她忽然说：你知道吗，你是来得最频繁的客人。\n\n从开店到现在，没有一个人像你这样。你笑了笑。因为你的咖啡好喝。她转身去擦杯子了。\n\n你看着她的背影，想着也许明年夏天，你会说出那句话。也许不会。但你知道，这家咖啡店，这个座位，这个人，你会一直记得。\n\n——沈以诺·普通结局·完——",sp:"ending",bg:"endgood",char:"yinuo"},
+"end_yin_friend": {tx:"友情结局「好咖啡不需要拉花」\n\n夏天结束了。你没有说出那句话。有一天，你在咖啡店坐到很晚。她关了店，跟你一起走出来。\n\n路灯亮了，树影投在地上。你知道吗，她忽然说。你是我最好的客人。你听懂了这句话的意思。客人。不是别的什么，只是客人。\n\n你点点头。你的咖啡是我喝过最好的。她笑了。好咖啡不需要拉花。\n\n你们在路灯下站了一会儿。然后她说：明天见。你说明天见。她转身走了。你看着她的背影消失在路灯的尽头。\n\n——沈以诺·友情结局·完——",sp:"ending",bg:"endgood",char:"yinuo"},
+"end_yin_bad1": {tx:"坏结局「打烊」\n\n那天傍晚，你去了咖啡店。她站在窗边，看着外面。你走进去，说：你不用一个人扛。\n\n她的脸色瞬间变了。然后她笑了。不是那种酷酷的笑，是疲惫的笑。不用了。谢谢你。但不用了。\n\n过了几天，你去咖啡店，发现门关着。贴着一张纸条：今日休息。你等了一天，两天，三天。门一直没有开。\n\n你知道，她关了店。也许是因为你说了那句话。也许不是。但你知道，她走了。\n\n——沈以诺·坏结局·完——",sp:"ending",bg:"endbad",char:"yinuo_tired"},
+"end_yin_bad2": {tx:"坏结局「一席之地的空」\n\n夏天结束了。你的分数太低了。她开始疏远你。你去咖啡店，她会点点头，但不会跟你多说话。\n\n有一天，你路过咖啡店，发现招牌换了。不再是「一席之地」，变成了另一家奶茶店。你站在门口，看着里面的人来人往。\n\n你想起第一次走进这家店的时候，她正在磨咖啡豆。她看了你一眼，没有说话，但把你坐的那个位置指了指。\n\n那个位置已经不存在了。但你记得。你永远都会记得。\n\n——沈以诺·坏结局·完——",sp:"ending",bg:"endbad",char:"yinuo_tired"},
+"end_hidden": {tx:"隐藏结局「夏夜晚风」\n\n你没有选择任何人。\n\n但你找到了自己。\n\n夏天的最后一天，你坐在天台上，看着夕阳。三个女孩都曾在这里坐过，都曾跟你一起看过这片天空。\n\n苏念的钢琴声从楼下传来。林小鹿种的向日葵在角落里朝着太阳。沈以诺的咖啡香从远处飘来。\n\n你闭上眼睛，听着风铃的声音。这个夏天的晚风会停，但吹过的痕迹不会消失。\n\n你想起第一天搬进来的时候，天台上只有一把生锈的折叠椅和几盆枯死的植物。现在，这里开满了花。\n\n也许，这就是这个夏天给你的礼物。不是爱情，不是友情，而是——你学会了如何让一些东西活过来。\n\n包括你自己。\n\n窗外的风铃在风里叮叮当当地响。你知道，这个夏天会结束。但你不会忘记。\n\n——隐藏结局·完——",sp:"ending",bg:"endhid"},
+"end_garden": {tx:"天台结局「花开」\n\n天台花园开满了花。向日葵、薄荷、小番茄，还有几盆你叫不出名字的植物。它们都在阳光下茁壮生长。\n\n你坐在折叠椅上，看着这些花。没有人陪伴你。但你并不觉得孤独。\n\n因为你知道，这些花是你种的。是你每天浇水、松土、除草，让它们活了过来。\n\n也许，这就是这个夏天给你的礼物。不是爱情，不是友情，而是——你学会了如何照顾一些东西。\n\n包括你自己。\n\n风铃在风里叮叮当当地响。你闭上眼睛，听着蝉鸣。\n\n至少这个夏天，你让一些东西活过来了。\n\n——天台结局·完——",sp:"ending",bg:"endgood"},
+"end_lonely": {tx:"孤独结局「不下了」\n\n你没有下楼。\n\n你躺在床上，听着窗外的蝉鸣。这个夏天，你学会了一件事：有些人注定只是风景。\n\n你想起苏念的钢琴声，想起林小鹿的虎牙，想起沈以诺的纹身。但你知道，她们都只是过客。\n\n也许有一天，你会后悔没有下楼。也许不会。但你知道，这个夏天，你选择了一个人。\n\n窗外的风铃在风里叮叮当当地响。你闭上眼睛。\n\n蝉鸣渐渐安静下来。夏天快结束了。\n\n——孤独结局·完——",sp:"ending",bg:"endbad"}
+};
+</script>
+</body>
+</html>
